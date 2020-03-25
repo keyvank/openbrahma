@@ -1,12 +1,15 @@
 use super::vector::Vector;
 
+#[derive(Debug)]
 pub struct Color(f64);
 
+#[derive(Debug)]
 pub struct Ray {
     pub pos: Vector,
     pub dir: Vector,
 }
 
+#[derive(Debug)]
 pub struct Intersection {
     pub dist: f64,
     pub col: Color,
@@ -16,6 +19,7 @@ pub trait Object {
     fn intersects(&self, r: Ray) -> Option<Intersection>;
 }
 
+#[derive(Debug)]
 pub struct Circle {
     pub pos: Vector,
     pub r: f64,

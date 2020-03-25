@@ -7,13 +7,13 @@ pub struct Vector {
 }
 
 impl Vector {
-    fn dot(self, other: Self) -> f64 {
+    pub fn dot(self, other: Self) -> f64 {
         self.x * other.x + self.y * other.y
     }
-    fn len(self) -> f64 {
+    pub fn len(self) -> f64 {
         self.dot(self).sqrt()
     }
-    fn norm(self) -> Self {
+    pub fn norm(self) -> Self {
         self / self.len()
     }
 }

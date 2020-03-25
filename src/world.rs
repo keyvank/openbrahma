@@ -24,6 +24,27 @@ struct Circle {
 
 impl Object for Circle {
     fn intersects(&self, r: Ray) -> Option<Intersection> {
-        None
+        let pc = self.pos - r.pos;
+        let tca = pc.dot(r.dir);
+        if tca > 0.0 {
+            let d2 = pc.dot(pc) - tca * tca;
+            let r2 = self.r * self.r;
+            if d2 <= r2 {
+                let dist = tca - (r2 - d2).sqrt();
+                if dist >= 0.0 {
+                    Some(Intersection {
+                        dist: dist,
+                        norm: self.pos,
+                        col: Color(1.0),
+                    })
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 }

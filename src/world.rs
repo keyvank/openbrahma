@@ -9,7 +9,6 @@ struct Ray {
 
 struct Intersection {
     pub dist: f64,
-    pub norm: Vector,
     pub col: Color,
 }
 
@@ -34,7 +33,6 @@ impl Object for Circle {
                 if dist >= 0.0 {
                     Some(Intersection {
                         dist: dist,
-                        norm: self.pos,
                         col: Color(1.0),
                     })
                 } else {

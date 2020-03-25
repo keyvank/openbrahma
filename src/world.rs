@@ -1,22 +1,22 @@
 use super::vector::Vector;
 
-struct Color(f64);
+pub struct Color(f64);
 
-struct Ray {
+pub struct Ray {
     pub pos: Vector,
     pub dir: Vector,
 }
 
-struct Intersection {
+pub struct Intersection {
     pub dist: f64,
     pub col: Color,
 }
 
-trait Object {
+pub trait Object {
     fn intersects(&self, r: Ray) -> Option<Intersection>;
 }
 
-struct Circle {
+pub struct Circle {
     pub pos: Vector,
     pub r: f64,
 }

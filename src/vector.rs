@@ -1,14 +1,11 @@
 use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Debug, Clone, Copy)]
-pub struct Vector {
-    pub x: f64,
-    pub y: f64,
-}
+pub struct Vector(pub f64, pub f64);
 
 impl Vector {
     pub fn dot(self, other: Self) -> f64 {
-        self.x * other.x + self.y * other.y
+        self.0 * other.0 + self.1 * other.1
     }
     pub fn len(self) -> f64 {
         self.dot(self).sqrt()
@@ -21,39 +18,27 @@ impl Vector {
 impl Add<Vector> for Vector {
     type Output = Self;
     fn add(self, other: Self) -> Self {
-        Self {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
+        Self(self.0 + other.0, self.1 + other.1)
     }
 }
 
 impl Sub<Vector> for Vector {
     type Output = Self;
     fn sub(self, other: Self) -> Self {
-        Self {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
+        Self(self.0 - other.0, self.1 - other.1)
     }
 }
 
 impl Mul<f64> for Vector {
     type Output = Self;
     fn mul(self, other: f64) -> Self {
-        Self {
-            x: self.x * other,
-            y: self.y * other,
-        }
+        Self(self.0 * other, self.1 * other)
     }
 }
 
 impl Div<f64> for Vector {
     type Output = Self;
     fn div(self, other: f64) -> Self {
-        Self {
-            x: self.x / other,
-            y: self.y / other,
-        }
+        Self(self.0 / other, self.1 / other)
     }
 }

@@ -14,7 +14,7 @@ struct Intersection {
 }
 
 trait Object {
-    fn intersects(r: Ray) -> Option<Intersection>;
+    fn intersects(&self, r: Ray) -> Option<Intersection>;
 }
 
 struct Circle {
@@ -23,7 +23,7 @@ struct Circle {
 }
 
 impl Object for Circle {
-    fn intersects(r: Ray) -> Option<Intersection> {
+    fn intersects(&self, r: Ray) -> Option<Intersection> {
         None
     }
 }

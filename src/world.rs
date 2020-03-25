@@ -23,13 +23,13 @@ struct Circle {
 
 impl Object for Circle {
     fn intersects(&self, r: Ray) -> Option<Intersection> {
-        let pc = self.pos - r.pos;
-        let tca = pc.dot(r.dir);
-        if tca > 0.0 {
-            let d2 = pc.dot(pc) - tca * tca;
+        let ray_to_circ = self.pos - r.pos;
+        let proj = ray_to_circ.dot(r.dir);
+        if proj > 0.0 {
+            let d2 = ray_to_circ.dot(ray_to_circ) - proj * proj;
             let r2 = self.r * self.r;
             if d2 <= r2 {
-                let dist = tca - (r2 - d2).sqrt();
+                let dist = proj - (r2 - d2).sqrt();
                 if dist >= 0.0 {
                     Some(Intersection {
                         dist: dist,

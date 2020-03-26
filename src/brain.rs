@@ -47,13 +47,14 @@ impl Brain {
         let mut rng = thread_rng();
 
         let b = Brain {
-            neurons: vec![
-                Rc::new(RefCell::new(Neuron {
-                    energy: 0i32,
-                    outputs: Vec::new(),
-                }));
-                neuron_count
-            ],
+            neurons: (0..neuron_count)
+                .map(|_| {
+                    Rc::new(RefCell::new(Neuron {
+                        energy: 0i32,
+                        outputs: Vec::new(),
+                    }))
+                })
+                .collect(),
         };
 
         for src in b.neurons.iter() {

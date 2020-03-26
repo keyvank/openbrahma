@@ -1,3 +1,6 @@
+use rand::seq::SliceRandom;
+use rand::thread_rng;
+
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -40,8 +43,10 @@ pub struct Brain {
 }
 
 impl Brain {
-    pub fn new(neuron_count: usize) -> Brain {
-        Brain {
+    pub fn new(neuron_count: usize, connection_count: usize) -> Brain {
+        let mut rng = thread_rng();
+
+        let b = Brain {
             neurons: vec![
                 Rc::new(RefCell::new(Neuron {
                     energy: 0i32,
@@ -49,7 +54,15 @@ impl Brain {
                 }));
                 neuron_count
             ],
+        };
+
+        for src in b.neurons.iter() {
+            for dst in b.neurons.choose_multiple(&mut rng, connection_count) {
+                src.borrow_mut().outputs.push(Rc::clone(dst));
+            }
         }
+
+        b
     }
 
     pub fn tick(&mut self) {

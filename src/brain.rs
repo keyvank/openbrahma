@@ -1,9 +1,6 @@
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
-use std::cell::RefCell;
-use std::rc::Rc;
-
 const LEAK: i32 = 1i32;
 const THRESHOLD: i32 = 50i32;
 const REST: i32 = -10i32;
@@ -12,21 +9,19 @@ const POWER: i32 = 3i32;
 #[derive(Debug)]
 struct Neuron {
     energy: i32,
-    outputs: Vec<Rc<RefCell<Neuron>>>,
 }
 
 impl Neuron {
-    pub fn stimulate(&mut self, power: i32) {
+    pub fn stimulate(&mut self, power: i32) -> bool {
         // If not resting
         if self.energy > 0 {
             self.energy += power;
             if self.energy > THRESHOLD {
-                for n in self.outputs.iter() {
-                    n.borrow_mut().stimulate(POWER);
-                }
+                return true; // TODO: Means neuron should fire!
                 self.energy = REST;
             }
         }
+        return false;
     }
 
     pub fn tick(&mut self) {
@@ -38,28 +33,30 @@ impl Neuron {
     }
 }
 
+use petgraph::graph::NodeIndex;
+use petgraph::Graph;
+
 pub struct Brain {
-    neurons: Vec<Rc<RefCell<Neuron>>>,
+    neurons: Graph<Neuron, u32>,
 }
 
 impl Brain {
     pub fn new(neuron_count: usize, connection_count: usize) -> Brain {
         let mut rng = thread_rng();
 
-        let b = Brain {
-            neurons: (0..neuron_count)
-                .map(|_| {
-                    Rc::new(RefCell::new(Neuron {
-                        energy: 0i32,
-                        outputs: Vec::new(),
-                    }))
-                })
-                .collect(),
+        let mut b = Brain {
+            neurons: Graph::new(),
         };
 
-        for src in b.neurons.iter() {
-            for dst in b.neurons.choose_multiple(&mut rng, connection_count) {
-                src.borrow_mut().outputs.push(Rc::clone(dst));
+        for _ in 0..neuron_count {
+            let i = b.neurons.add_node(Neuron { energy: 0i32 });
+        }
+
+        let indices: Vec<NodeIndex<_>> = b.neurons.node_indices().collect();
+
+        for &src in indices.iter() {
+            for &dst in indices.choose_multiple(&mut rng, connection_count) {
+                b.neurons.add_edge(src, dst, 0u32);
             }
         }
 
@@ -67,8 +64,8 @@ impl Brain {
     }
 
     pub fn tick(&mut self) {
-        for n in self.neurons.iter() {
-            n.borrow_mut().tick();
+        for n in self.neurons.node_weights_mut() {
+            n.tick();
         }
     }
 }

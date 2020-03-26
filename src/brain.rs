@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 #[derive(Debug)]
 struct Neuron {
-    energy: f64,
+    energy: i32,
     outputs: Vec<Rc<Neuron>>,
 }
 
@@ -15,7 +15,7 @@ impl Brain {
         Brain {
             neurons: vec![
                 Rc::new(Neuron {
-                    energy: 0.0,
+                    energy: 0i32,
                     outputs: Vec::new(),
                 });
                 neuron_count

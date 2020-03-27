@@ -1,3 +1,4 @@
+use petgraph::visit::EdgeRef;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
@@ -37,7 +38,7 @@ use petgraph::graph::NodeIndex;
 use petgraph::stable_graph::StableGraph;
 
 pub struct Brain {
-    neurons: StableGraph<Neuron, u32>,
+    neurons: StableGraph<Neuron, i32>,
 }
 
 impl Brain {
@@ -56,7 +57,7 @@ impl Brain {
 
         for &src in indices.iter() {
             for &dst in indices.choose_multiple(&mut rng, connection_count) {
-                b.neurons.add_edge(src, dst, 0u32);
+                b.neurons.add_edge(src, dst, 1i32);
             }
         }
 
@@ -64,12 +65,12 @@ impl Brain {
     }
 
     pub fn stimulate(&mut self, i: usize, power: i32) {
-        let mut nodes = vec![NodeIndex::new(i)];
+        let mut nodes = vec![(NodeIndex::new(i), power)];
         while !nodes.is_empty() {
-            let ix = nodes.remove(0);
-            if self.neurons.node_weight_mut(ix).unwrap().stimulate(power) {
-                for neigh in self.neurons.neighbors(ix) {
-                    nodes.push(neigh);
+            let (ix, pow) = nodes.remove(0);
+            if self.neurons.node_weight_mut(ix).unwrap().stimulate(pow) {
+                for neigh in self.neurons.edges(ix) {
+                    nodes.push((neigh.target(), *neigh.weight()));
                 }
             }
         }

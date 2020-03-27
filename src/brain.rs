@@ -75,6 +75,47 @@ impl Brain {
         }
     }
 
+    pub fn random_node(&self) -> NodeIndex {
+        let mut rng = thread_rng();
+
+        *self
+            .neurons
+            .node_indices()
+            .collect::<Vec<_>>()
+            .choose(&mut rng)
+            .unwrap()
+    }
+
+    pub fn random_region(
+        &mut self,
+        len: usize,
+    ) -> (Vec<NodeIndex>, Vec<(NodeIndex, NodeIndex, i32)>) {
+        let start = self.random_node();
+        let mut nodes = vec![start];
+        let mut vertices = nodes.clone();
+        let mut edges = Vec::new();
+
+        let mut done = false;
+        while !done {
+            let ix = nodes.remove(0);
+            for neigh in self.neurons.edges(ix) {
+                if vertices.len() < len {
+                    let targ = neigh.target();
+                    nodes.push(targ);
+                    if !vertices.contains(&targ) {
+                        vertices.push(targ);
+                    }
+                    edges.push((neigh.source(), targ, *neigh.weight()))
+                } else {
+                    done = true;
+                    break;
+                }
+            }
+        }
+
+        (vertices, edges)
+    }
+
     pub fn tick(&mut self) {
         let indices = self.neurons.node_indices().collect::<Vec<NodeIndex<_>>>();
         for i in indices {

@@ -37,7 +37,7 @@ use petgraph::graph::NodeIndex;
 use petgraph::stable_graph::StableGraph;
 
 pub struct Brain {
-    neurons: StableGraph<Neuron, i32>,
+    graph: StableGraph<Neuron, i32>,
 }
 
 impl Brain {
@@ -45,18 +45,18 @@ impl Brain {
         let mut rng = thread_rng();
 
         let mut b = Brain {
-            neurons: StableGraph::new(),
+            graph: StableGraph::new(),
         };
 
         for _ in 0..neuron_count {
-            let i = b.neurons.add_node(Neuron { energy: 0i32 });
+            let i = b.graph.add_node(Neuron { energy: 0i32 });
         }
 
-        let indices: Vec<NodeIndex> = b.neurons.node_indices().collect();
+        let indices: Vec<NodeIndex> = b.graph.node_indices().collect();
 
         for &src in indices.iter() {
             for &dst in indices.choose_multiple(&mut rng, connection_count) {
-                b.neurons.add_edge(src, dst, 1i32);
+                b.graph.add_edge(src, dst, 1i32);
             }
         }
 
@@ -67,8 +67,8 @@ impl Brain {
         let mut nodes = vec![(index, power)];
         while !nodes.is_empty() {
             let (ix, pow) = nodes.remove(0);
-            if self.neurons.node_weight_mut(ix).unwrap().stimulate(pow) {
-                for neigh in self.neurons.edges(ix) {
+            if self.graph.node_weight_mut(ix).unwrap().stimulate(pow) {
+                for neigh in self.graph.edges(ix) {
                     nodes.push((neigh.target(), *neigh.weight()));
                 }
             }
@@ -79,7 +79,7 @@ impl Brain {
         let mut rng = thread_rng();
 
         *self
-            .neurons
+            .graph
             .node_indices()
             .collect::<Vec<_>>()
             .choose(&mut rng)
@@ -98,7 +98,7 @@ impl Brain {
         let mut done = false;
         while !done {
             let ix = nodes.remove(0);
-            for neigh in self.neurons.edges(ix) {
+            for neigh in self.graph.edges(ix) {
                 if vertices.len() < len {
                     let targ = neigh.target();
                     nodes.push(targ);
@@ -117,9 +117,9 @@ impl Brain {
     }
 
     pub fn tick(&mut self) {
-        let indices = self.neurons.node_indices().collect::<Vec<NodeIndex<_>>>();
+        let indices = self.graph.node_indices().collect::<Vec<NodeIndex<_>>>();
         for i in indices {
-            self.neurons.node_weight_mut(i).unwrap().tick();
+            self.graph.node_weight_mut(i).unwrap().tick();
         }
     }
 }

@@ -1,6 +1,7 @@
 use petgraph::visit::EdgeRef;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
+use std::collections::HashMap;
 
 const LEAK: i32 = 1i32;
 const THRESHOLD: i32 = 50i32;
@@ -86,26 +87,24 @@ impl Brain {
         *self.neurons.choose(&mut rng).unwrap()
     }
 
-    pub fn random_region(
-        &mut self,
-        len: usize,
-    ) -> (Vec<NodeIndex>, Vec<(NodeIndex, NodeIndex, i32)>) {
+    pub fn random_region(&mut self, len: usize) -> HashMap<NodeIndex, Vec<(NodeIndex, i32)>> {
         let start = self.random_node();
-        let mut nodes = vec![start];
-        let mut vertices = nodes.clone();
-        let mut edges = Vec::new();
+
+        let mut ret = HashMap::new();
+        ret.insert(start, Vec::new());
+
+        let mut queue = vec![start];
 
         let mut done = false;
         while !done {
-            let ix = nodes.remove(0);
+            let ix = queue.remove(0);
             for neigh in self.graph.edges(ix) {
-                if vertices.len() < len {
-                    let targ = neigh.target();
-                    nodes.push(targ);
-                    if !vertices.contains(&targ) {
-                        vertices.push(targ);
-                    }
-                    edges.push((neigh.source(), targ, *neigh.weight()))
+                if ret.len() < len {
+                    queue.push(neigh.target());
+                    let edge = (neigh.target(), *neigh.weight());
+                    ret.entry(neigh.source())
+                        .and_modify(|e| e.push(edge))
+                        .or_insert(vec![edge]);
                 } else {
                     done = true;
                     break;
@@ -113,7 +112,7 @@ impl Brain {
             }
         }
 
-        (vertices, edges)
+        ret
     }
 
     pub fn tick(&mut self) {

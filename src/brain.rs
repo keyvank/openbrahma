@@ -14,30 +14,30 @@ struct Neuron {
 impl Neuron {
     pub fn stimulate(&mut self, power: i32) -> bool {
         // If not resting
-        if self.energy > 0 {
+        if self.energy >= 0 {
             self.energy += power;
             if self.energy > THRESHOLD {
-                return true; // TODO: Means neuron should fire!
                 self.energy = REST;
+                return true; // TODO: Means neuron should fire!
             }
         }
         return false;
     }
 
     pub fn tick(&mut self) {
-        if self.energy < 0 {
-            self.energy += LEAK;
-        } else {
+        if self.energy >= LEAK {
             self.energy -= LEAK;
+        } else {
+            self.energy += LEAK;
         }
     }
 }
 
 use petgraph::graph::NodeIndex;
-use petgraph::Graph;
+use petgraph::stable_graph::StableGraph;
 
 pub struct Brain {
-    neurons: Graph<Neuron, u32>,
+    neurons: StableGraph<Neuron, u32>,
 }
 
 impl Brain {
@@ -45,7 +45,7 @@ impl Brain {
         let mut rng = thread_rng();
 
         let mut b = Brain {
-            neurons: Graph::new(),
+            neurons: StableGraph::new(),
         };
 
         for _ in 0..neuron_count {
@@ -63,9 +63,22 @@ impl Brain {
         b
     }
 
+    pub fn stimulate(&mut self, i: usize, power: i32) {
+        let mut nodes = vec![NodeIndex::new(i)];
+        while !nodes.is_empty() {
+            let ix = nodes.remove(0);
+            if self.neurons.node_weight_mut(ix).unwrap().stimulate(power) {
+                for neigh in self.neurons.neighbors(ix) {
+                    nodes.push(neigh);
+                }
+            }
+        }
+    }
+
     pub fn tick(&mut self) {
-        for n in self.neurons.node_weights_mut() {
-            n.tick();
+        let indices = self.neurons.node_indices().collect::<Vec<NodeIndex<_>>>();
+        for i in indices {
+            self.neurons.node_weight_mut(i).unwrap().tick();
         }
     }
 }

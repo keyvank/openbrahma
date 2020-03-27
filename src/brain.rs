@@ -83,13 +83,7 @@ impl Brain {
 
     pub fn random_node(&self) -> NodeIndex {
         let mut rng = thread_rng();
-
-        *self
-            .graph
-            .node_indices()
-            .collect::<Vec<_>>()
-            .choose(&mut rng)
-            .unwrap()
+        *self.neurons.choose(&mut rng).unwrap()
     }
 
     pub fn random_region(

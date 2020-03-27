@@ -98,6 +98,9 @@ impl Brain {
         let mut queue = vec![start];
 
         for _ in 0..len {
+            if queue.is_empty() {
+                break;
+            }
             let src = queue.remove(0);
             for neigh in self.graph.edges(src) {
                 let dst = neigh.target();

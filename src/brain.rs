@@ -5,7 +5,6 @@ use rand::thread_rng;
 const LEAK: i32 = 1i32;
 const THRESHOLD: i32 = 50i32;
 const REST: i32 = -10i32;
-const POWER: i32 = 3i32;
 
 #[derive(Debug)]
 struct Neuron {

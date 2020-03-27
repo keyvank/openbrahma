@@ -38,6 +38,7 @@ use petgraph::stable_graph::StableGraph;
 
 pub struct Brain {
     graph: StableGraph<Neuron, i32>,
+    neurons: Vec<NodeIndex>,
 }
 
 impl Brain {
@@ -46,21 +47,26 @@ impl Brain {
 
         let mut b = Brain {
             graph: StableGraph::new(),
+            neurons: Vec::new(),
         };
 
         for _ in 0..neuron_count {
             let i = b.graph.add_node(Neuron { energy: 0i32 });
         }
 
-        let indices: Vec<NodeIndex> = b.graph.node_indices().collect();
+        b.update_neurons();
 
-        for &src in indices.iter() {
-            for &dst in indices.choose_multiple(&mut rng, connection_count) {
+        for &src in b.neurons.iter() {
+            for &dst in b.neurons.choose_multiple(&mut rng, connection_count) {
                 b.graph.add_edge(src, dst, 1i32);
             }
         }
 
         b
+    }
+
+    pub fn update_neurons(&mut self) {
+        self.neurons = self.graph.node_indices().collect();
     }
 
     pub fn stimulate(&mut self, index: NodeIndex, power: i32) {

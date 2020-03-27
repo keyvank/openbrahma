@@ -87,11 +87,13 @@ impl Brain {
         *self.neurons.choose(&mut rng).unwrap()
     }
 
-    pub fn random_region(&mut self, len: usize) -> HashMap<NodeIndex, Vec<(NodeIndex, i32)>> {
+    pub fn pop_region(&mut self, len: usize) -> HashMap<NodeIndex, Vec<(NodeIndex, i32)>> {
         let start = self.random_node();
 
         let mut ret = HashMap::new();
         ret.insert(start, Vec::new());
+
+        let mut edges = Vec::new();
 
         let mut queue = vec![start];
 
@@ -103,8 +105,13 @@ impl Brain {
                     queue.push(dst);
                     ret.entry(dst).or_insert(Vec::new());
                     ret.get_mut(&src).unwrap().push((dst, *neigh.weight()));
+                    edges.push(neigh.id());
                 }
             }
+        }
+
+        for ix in edges {
+            self.graph.remove_edge(ix);
         }
 
         ret

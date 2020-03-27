@@ -95,19 +95,14 @@ impl Brain {
 
         let mut queue = vec![start];
 
-        let mut done = false;
-        while !done {
-            let ix = queue.remove(0);
-            for neigh in self.graph.edges(ix) {
-                if ret.len() < len {
-                    queue.push(neigh.target());
-                    let edge = (neigh.target(), *neigh.weight());
-                    ret.entry(neigh.source())
-                        .and_modify(|e| e.push(edge))
-                        .or_insert(vec![edge]);
-                } else {
-                    done = true;
-                    break;
+        for _ in 0..len {
+            let src = queue.remove(0);
+            for neigh in self.graph.edges(src) {
+                let dst = neigh.target();
+                if ret.contains_key(&dst) || ret.len() < len {
+                    queue.push(dst);
+                    ret.entry(dst).or_insert(Vec::new());
+                    ret.get_mut(&src).unwrap().push((dst, *neigh.weight()));
                 }
             }
         }

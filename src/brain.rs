@@ -6,7 +6,7 @@ const LEAK: i32 = 1i32;
 const THRESHOLD: i32 = 50i32;
 const REST: i32 = -10i32;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Neuron {
     energy: i32,
 }

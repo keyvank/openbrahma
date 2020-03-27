@@ -52,7 +52,7 @@ impl Brain {
             let i = b.neurons.add_node(Neuron { energy: 0i32 });
         }
 
-        let indices: Vec<NodeIndex<_>> = b.neurons.node_indices().collect();
+        let indices: Vec<NodeIndex> = b.neurons.node_indices().collect();
 
         for &src in indices.iter() {
             for &dst in indices.choose_multiple(&mut rng, connection_count) {
@@ -63,8 +63,8 @@ impl Brain {
         b
     }
 
-    pub fn stimulate(&mut self, i: usize, power: i32) {
-        let mut nodes = vec![(NodeIndex::new(i), power)];
+    pub fn stimulate(&mut self, index: NodeIndex, power: i32) {
+        let mut nodes = vec![(index, power)];
         while !nodes.is_empty() {
             let (ix, pow) = nodes.remove(0);
             if self.neurons.node_weight_mut(ix).unwrap().stimulate(pow) {

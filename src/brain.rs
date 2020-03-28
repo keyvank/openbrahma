@@ -120,6 +120,35 @@ impl Brain {
         ret
     }
 
+    pub fn crossover(&mut self, b: &mut Brain) {
+        let reg_a = self.pop_region(1000);
+        let reg_b = b.pop_region(1000);
+        let a_to_b = reg_a
+            .keys()
+            .copied()
+            .zip(reg_b.keys().copied())
+            .collect::<HashMap<_, _>>();
+        let b_to_a = reg_b
+            .keys()
+            .copied()
+            .zip(reg_a.keys().copied())
+            .collect::<HashMap<_, _>>();
+        for (k, v) in reg_a {
+            let src = a_to_b.get(&k).unwrap();
+            for (dst, w) in v {
+                let dst = a_to_b.get(&dst).unwrap();
+                b.graph.add_edge(*src, *dst, w);
+            }
+        }
+        for (k, v) in reg_b {
+            let src = b_to_a.get(&k).unwrap();
+            for (dst, w) in v {
+                let dst = b_to_a.get(&dst).unwrap();
+                self.graph.add_edge(*src, *dst, w);
+            }
+        }
+    }
+
     pub fn tick(&mut self) {
         let indices = self.graph.node_indices().collect::<Vec<NodeIndex<_>>>();
         for i in indices {

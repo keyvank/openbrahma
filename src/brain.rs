@@ -122,9 +122,9 @@ impl Brain {
         ret
     }
 
-    pub fn crossover(&mut self, b: &mut Brain) {
-        let reg_a = self.pop_region(1000);
-        let reg_b = b.pop_region(1000);
+    pub fn crossover(&mut self, b: &mut Brain, len: usize) {
+        let reg_a = self.pop_region(len);
+        let reg_b = b.pop_region(len);
         let a_to_b = reg_a
             .keys()
             .copied()

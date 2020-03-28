@@ -22,6 +22,7 @@ pub trait Object {
 #[derive(Debug)]
 pub struct Circle {
     pub pos: Vector,
+    pub rot: f64,
     pub r: f64,
 }
 

@@ -107,8 +107,10 @@ impl Brain {
                 if ret.contains_key(&dst) || ret.len() < len {
                     queue.push(dst);
                     ret.entry(dst).or_insert(Vec::new());
-                    ret.get_mut(&src).unwrap().push((dst, *neigh.weight()));
-                    edges.push(neigh.id());
+                    if !edges.contains(&neigh.id()) {
+                        ret.get_mut(&src).unwrap().push((dst, *neigh.weight()));
+                        edges.push(neigh.id());
+                    }
                 }
             }
         }

@@ -1,7 +1,7 @@
 use super::shape::Shape;
 
 pub trait Object {
-    fn tick(&mut self, w: &mut World);
+    fn tick(&mut self);
 }
 
 pub struct World {
@@ -9,5 +9,9 @@ pub struct World {
 }
 
 impl World {
-    pub fn tick(&mut self) {}
+    pub fn tick(&mut self) {
+        for obj in self.objects.iter_mut() {
+            obj.tick();
+        }
+    }
 }

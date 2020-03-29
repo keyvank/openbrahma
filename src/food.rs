@@ -7,5 +7,5 @@ pub struct Food<S: Shape> {
 }
 
 impl<S: Shape> Object for Food<S> {
-    fn tick(&mut self, w: &mut World) {}
+    fn tick(&mut self) {}
 }

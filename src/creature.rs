@@ -25,7 +25,7 @@ impl<S: Shape> Creature<S> {
 }
 
 impl<S: Shape> Object for Creature<S> {
-    fn tick(&mut self, w: &mut World) {
+    fn tick(&mut self) {
         self.brain.tick();
         for &e in self.eye.iter() {
             self.brain.stimulate(e, 3i32);

@@ -85,7 +85,7 @@ impl Brain {
         }
     }
 
-    pub fn random_nodes(&self, count: usize) -> Vec<NeuronId> {
+    pub fn random_neurons(&self, count: usize) -> Vec<NeuronId> {
         let mut rng = thread_rng();
         self.neurons
             .choose_multiple(&mut rng, count)
@@ -94,7 +94,7 @@ impl Brain {
     }
 
     fn pop_region(&mut self, len: usize) -> HashMap<NeuronId, Vec<(NeuronId, i32)>> {
-        let start = self.random_nodes(1)[0];
+        let start = self.random_neurons(1)[0];
 
         let mut ret = HashMap::new();
         ret.insert(start, Vec::new());

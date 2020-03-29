@@ -10,7 +10,7 @@ pub struct Creature<O: Object> {
 
 impl<O: Object> Creature<O> {
     pub fn new(health: u32, brain: Brain, body: O) -> Creature<O> {
-        let eye = brain.random_nodes(10);
+        let eye = brain.random_neurons(10);
         Creature {
             health,
             brain,

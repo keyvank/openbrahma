@@ -1,6 +1,6 @@
-use super::object::Object;
+use super::shape::Shape;
 
-pub struct Food<O: Object> {
-    body: O,
+pub struct Food<S: Shape> {
+    body: S,
     health: u32,
 }

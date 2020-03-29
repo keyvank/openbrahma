@@ -15,7 +15,7 @@ pub struct Intersection {
     pub col: Color,
 }
 
-pub trait Object {
+pub trait Shape {
     fn intersects(&self, r: Ray) -> Option<Intersection>;
 }
 
@@ -26,7 +26,7 @@ pub struct Circle {
     pub r: f64,
 }
 
-impl Object for Circle {
+impl Shape for Circle {
     fn intersects(&self, r: Ray) -> Option<Intersection> {
         let ray_to_circ = self.pos - r.pos;
         let proj = ray_to_circ.dot(r.dir);

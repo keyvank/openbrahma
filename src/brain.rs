@@ -9,12 +9,15 @@ const REST: i32 = -10i32;
 const WEIGHT: i32 = 3i32;
 
 #[derive(Debug, Clone)]
-struct Neuron {
-    energy: i32,
+pub struct Neuron {
+    pub energy: i32,
+    pub delta: i32,
 }
 
 impl Neuron {
     pub fn stimulate(&mut self, power: i32) -> bool {
+        self.delta += power;
+
         // If not resting
         if self.energy >= 0 {
             self.energy += power;
@@ -27,6 +30,7 @@ impl Neuron {
     }
 
     pub fn tick(&mut self) {
+        self.delta = 0;
         if self.energy >= LEAK {
             self.energy -= LEAK;
         } else {
@@ -55,7 +59,10 @@ impl Brain {
         };
 
         for _ in 0..neuron_count {
-            let i = b.graph.add_node(Neuron { energy: 0i32 });
+            let i = b.graph.add_node(Neuron {
+                delta: 0i32,
+                energy: 0i32,
+            });
         }
 
         b.update_neurons();
@@ -90,6 +97,13 @@ impl Brain {
         self.neurons
             .choose_multiple(&mut rng, count)
             .copied()
+            .collect()
+    }
+
+    pub fn get_deltas(&self, neurons: &Vec<NeuronId>) -> Vec<i32> {
+        neurons
+            .iter()
+            .map(|&id| self.graph.node_weight(id).unwrap().delta)
             .collect()
     }
 

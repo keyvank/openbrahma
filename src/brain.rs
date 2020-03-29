@@ -69,7 +69,7 @@ impl Brain {
         b
     }
 
-    pub fn update_neurons(&mut self) {
+    fn update_neurons(&mut self) {
         self.neurons = self.graph.node_indices().collect();
     }
 
@@ -93,7 +93,7 @@ impl Brain {
             .collect()
     }
 
-    pub fn pop_region(&mut self, len: usize) -> HashMap<NodeIndex, Vec<(NodeIndex, i32)>> {
+    fn pop_region(&mut self, len: usize) -> HashMap<NodeIndex, Vec<(NodeIndex, i32)>> {
         let start = self.random_nodes(1)[0];
 
         let mut ret = HashMap::new();

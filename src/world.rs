@@ -1,5 +1,5 @@
 use super::shape::Shape;
 
-pub trait Object: Shape {}
+pub trait Object {}
 
 pub struct World {}

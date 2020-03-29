@@ -1,5 +1,6 @@
 use super::brain::{Brain, NeuronId};
 use super::shape::Shape;
+use super::world::Object;
 
 pub struct Creature<S: Shape> {
     health: u32,
@@ -30,3 +31,5 @@ impl<S: Shape> Creature<S> {
         let motor_deltas = self.brain.get_deltas(&self.motors);
     }
 }
+
+impl<S: Shape> Object for Creature<S> {}

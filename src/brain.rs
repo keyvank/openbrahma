@@ -38,12 +38,12 @@ impl Neuron {
 use petgraph::graph::NodeIndex;
 use petgraph::stable_graph::StableGraph;
 
+pub type NeuronId = NodeIndex;
+
 pub struct Brain {
     graph: StableGraph<Neuron, i32>,
-    neurons: Vec<NodeIndex>,
+    neurons: Vec<NeuronId>,
 }
-
-pub type NeuronId = NodeIndex;
 
 impl Brain {
     pub fn new(neuron_count: usize, connection_count: usize) -> Brain {
@@ -93,7 +93,7 @@ impl Brain {
             .collect()
     }
 
-    fn pop_region(&mut self, len: usize) -> HashMap<NodeIndex, Vec<(NodeIndex, i32)>> {
+    fn pop_region(&mut self, len: usize) -> HashMap<NeuronId, Vec<(NeuronId, i32)>> {
         let start = self.random_nodes(1)[0];
 
         let mut ret = HashMap::new();
@@ -158,8 +158,7 @@ impl Brain {
     }
 
     pub fn tick(&mut self) {
-        let indices = self.graph.node_indices().collect::<Vec<NodeIndex<_>>>();
-        for i in indices {
+        for &i in self.neurons.iter() {
             self.graph.node_weight_mut(i).unwrap().tick();
         }
     }

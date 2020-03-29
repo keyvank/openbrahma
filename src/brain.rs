@@ -43,6 +43,8 @@ pub struct Brain {
     neurons: Vec<NodeIndex>,
 }
 
+pub type NeuronId = NodeIndex;
+
 impl Brain {
     pub fn new(neuron_count: usize, connection_count: usize) -> Brain {
         let mut rng = thread_rng();
@@ -71,7 +73,7 @@ impl Brain {
         self.neurons = self.graph.node_indices().collect();
     }
 
-    pub fn stimulate(&mut self, index: NodeIndex, power: i32) {
+    pub fn stimulate(&mut self, index: NeuronId, power: i32) {
         let mut nodes = vec![(index, power)];
         while !nodes.is_empty() {
             let (ix, pow) = nodes.remove(0);
@@ -83,7 +85,7 @@ impl Brain {
         }
     }
 
-    pub fn random_nodes(&self, count: usize) -> Vec<NodeIndex> {
+    pub fn random_nodes(&self, count: usize) -> Vec<NeuronId> {
         let mut rng = thread_rng();
         self.neurons
             .choose_multiple(&mut rng, count)

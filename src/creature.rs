@@ -1,12 +1,11 @@
-use super::brain::Brain;
+use super::brain::{Brain, NeuronId};
 use super::world::Object;
-use petgraph::graph::NodeIndex;
 
 pub struct Creature<O: Object> {
     health: u32,
     brain: Brain,
     body: O,
-    eye: Vec<NodeIndex>,
+    eye: Vec<NeuronId>,
 }
 
 impl<O: Object> Creature<O> {

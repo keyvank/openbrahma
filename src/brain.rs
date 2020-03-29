@@ -6,6 +6,7 @@ use std::collections::HashMap;
 const LEAK: i32 = 1i32;
 const THRESHOLD: i32 = 50i32;
 const REST: i32 = -10i32;
+const WEIGHT: i32 = 3i32;
 
 #[derive(Debug, Clone)]
 struct Neuron {
@@ -59,7 +60,7 @@ impl Brain {
 
         for &src in b.neurons.iter() {
             for &dst in b.neurons.choose_multiple(&mut rng, connection_count) {
-                b.graph.add_edge(src, dst, 1i32);
+                b.graph.add_edge(src, dst, WEIGHT);
             }
         }
 

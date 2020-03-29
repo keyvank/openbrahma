@@ -1,5 +1,5 @@
 use super::brain::{Brain, NeuronId};
-use super::world::Object;
+use super::object::Object;
 
 pub struct Creature<O: Object> {
     health: u32,

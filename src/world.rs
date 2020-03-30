@@ -4,7 +4,7 @@ use super::vector::Vector;
 pub enum Sense {}
 
 pub enum Action {
-    Move(Vector),
+    Move(Transform),
 }
 
 pub trait Updatable {

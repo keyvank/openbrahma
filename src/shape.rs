@@ -6,7 +6,7 @@ pub struct Color(f64);
 #[derive(Debug)]
 pub struct Ray {
     pub pos: Vector,
-    pub dir: Vector,
+    pub ang: f64,
 }
 
 #[derive(Debug)]
@@ -33,7 +33,8 @@ pub struct Circle {
 impl Shape for Circle {
     fn intersects(&self, t: Transform, r: Ray) -> Option<Intersection> {
         let ray_to_circ = t.pos - r.pos;
-        let proj = ray_to_circ.dot(r.dir);
+        let dir = Vector(r.ang.cos(), r.ang.sin());
+        let proj = ray_to_circ.dot(dir);
         if proj > 0.0 {
             let d2 = ray_to_circ.dot(ray_to_circ) - proj * proj;
             let r2 = self.r * self.r;

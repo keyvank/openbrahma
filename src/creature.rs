@@ -1,6 +1,6 @@
 use super::brain::{Brain, NeuronId};
 use super::shape::Shape;
-use super::world::{Action, Updatable, World};
+use super::world::{Action, Sense, Updatable, World};
 
 pub struct Creature<S: Shape> {
     health: u32,
@@ -25,7 +25,7 @@ impl<S: Shape> Creature<S> {
 }
 
 impl<S: Shape> Updatable for Creature<S> {
-    fn update(&mut self) -> Vec<Action> {
+    fn update(&mut self, senses: Vec<Sense>) -> Vec<Action> {
         self.brain.update();
         for &e in self.eye.iter() {
             self.brain.stimulate(e, 3i32);

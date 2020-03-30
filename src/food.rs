@@ -1,5 +1,5 @@
 use super::shape::Shape;
-use super::world::{Action, Updatable, World};
+use super::world::{Action, Sense, Updatable, World};
 
 pub struct Food<S: Shape> {
     body: S,
@@ -7,7 +7,7 @@ pub struct Food<S: Shape> {
 }
 
 impl<S: Shape> Updatable for Food<S> {
-    fn update(&mut self) -> Vec<Action> {
+    fn update(&mut self, senses: Vec<Sense>) -> Vec<Action> {
         Vec::new()
     }
 }

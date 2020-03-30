@@ -1,7 +1,7 @@
 use super::vector::Vector;
 
-#[derive(Debug)]
-pub struct Color(f64);
+#[derive(Debug, Clone)]
+pub struct Color(pub f64);
 
 #[derive(Debug)]
 pub struct Ray {
@@ -28,6 +28,7 @@ pub trait Shape {
 #[derive(Debug)]
 pub struct Circle {
     pub r: f64,
+    pub col: Color,
 }
 
 impl Shape for Circle {
@@ -43,7 +44,7 @@ impl Shape for Circle {
                 if dist >= 0.0 {
                     Some(Intersection {
                         dist: dist,
-                        col: Color(1.0),
+                        col: self.col.clone(),
                     })
                 } else {
                     None

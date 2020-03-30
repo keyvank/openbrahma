@@ -29,7 +29,7 @@ impl Neuron {
         return false;
     }
 
-    pub fn tick(&mut self) {
+    pub fn update(&mut self) {
         self.delta = 0;
         if self.energy >= LEAK {
             self.energy -= LEAK;
@@ -171,9 +171,9 @@ impl Brain {
         }
     }
 
-    pub fn tick(&mut self) {
+    pub fn update(&mut self) {
         for &i in self.neurons.iter() {
-            self.graph.node_weight_mut(i).unwrap().tick();
+            self.graph.node_weight_mut(i).unwrap().update();
         }
     }
 }

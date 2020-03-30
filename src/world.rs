@@ -5,12 +5,12 @@ pub enum Action {
     Move(Vector),
 }
 
-pub trait Object {
-    fn tick(&mut self) -> Vec<Action>;
+pub trait Updatable {
+    fn update(&mut self) -> Vec<Action>;
 }
 
 pub struct World {
-    objects: Vec<Box<dyn Object>>,
+    objects: Vec<Box<dyn Updatable>>,
 }
 
 impl World {
@@ -19,12 +19,12 @@ impl World {
             objects: Vec::new(),
         }
     }
-    pub fn add_object(&mut self, o: Box<dyn Object>) {
+    pub fn add_object(&mut self, o: Box<dyn Updatable>) {
         self.objects.push(o);
     }
-    pub fn tick(&mut self) {
+    pub fn update(&mut self) {
         for obj in self.objects.iter_mut() {
-            obj.tick();
+            obj.update();
         }
     }
 }

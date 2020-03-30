@@ -39,7 +39,11 @@ impl World {
     }
     pub fn update(&mut self) {
         for obj in self.objects.iter_mut() {
-            obj.body.update(Vec::new());
+            for act in obj.body.update(Vec::new()) {
+                match act {
+                    Action::Move(t) => {}
+                }
+            }
         }
     }
 }

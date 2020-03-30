@@ -1,5 +1,6 @@
 use super::brain::{Brain, NeuronId};
-use super::shape::Shape;
+use super::shape::{Shape, Transform};
+use super::vector::Vector;
 use super::world::{Action, Sense, Updatable, World};
 
 pub struct Creature<S: Shape> {
@@ -31,6 +32,9 @@ impl<S: Shape> Updatable for Creature<S> {
             self.brain.stimulate(e, 3i32);
         }
         let motor_deltas = self.brain.get_deltas(&self.motors);
-        Vec::new()
+        vec![Action::Move(Transform {
+            pos: Vector(0.0, 0.0),
+            rot: 0.0,
+        })]
     }
 }

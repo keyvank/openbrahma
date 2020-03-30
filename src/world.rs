@@ -1,7 +1,12 @@
 use super::shape::Shape;
+use super::vector::Vector;
+
+pub enum Action {
+    Move(Vector),
+}
 
 pub trait Object {
-    fn tick(&mut self);
+    fn tick(&mut self) -> Vec<Action>;
 }
 
 pub struct World {

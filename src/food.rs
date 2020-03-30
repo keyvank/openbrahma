@@ -1,5 +1,5 @@
 use super::shape::Shape;
-use super::world::{Object, World};
+use super::world::{Action, Object, World};
 
 pub struct Food<S: Shape> {
     body: S,
@@ -7,5 +7,7 @@ pub struct Food<S: Shape> {
 }
 
 impl<S: Shape> Object for Food<S> {
-    fn tick(&mut self) {}
+    fn tick(&mut self) -> Vec<Action> {
+        Vec::new()
+    }
 }

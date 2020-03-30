@@ -1,6 +1,6 @@
 use super::brain::{Brain, NeuronId};
 use super::shape::Shape;
-use super::world::{Object, World};
+use super::world::{Action, Object, World};
 
 pub struct Creature<S: Shape> {
     health: u32,
@@ -25,11 +25,12 @@ impl<S: Shape> Creature<S> {
 }
 
 impl<S: Shape> Object for Creature<S> {
-    fn tick(&mut self) {
+    fn tick(&mut self) -> Vec<Action> {
         self.brain.tick();
         for &e in self.eye.iter() {
             self.brain.stimulate(e, 3i32);
         }
         let motor_deltas = self.brain.get_deltas(&self.motors);
+        Vec::new()
     }
 }

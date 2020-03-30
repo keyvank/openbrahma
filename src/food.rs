@@ -6,6 +6,12 @@ pub struct Food<S: Shape> {
     health: u32,
 }
 
+impl<S: Shape> Food<S> {
+    pub fn new(health: u32, body: S) -> Food<S> {
+        Food { health, body }
+    }
+}
+
 impl<S: Shape> Updatable for Food<S> {
     fn update(&mut self, senses: Vec<Sense>) -> Vec<Action> {
         Vec::new()

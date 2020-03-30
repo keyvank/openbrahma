@@ -22,7 +22,7 @@ pub struct Intersection {
 }
 
 pub trait Shape {
-    fn intersects(&self, t: Transform, r: Ray) -> Option<Intersection>;
+    fn intersects(&self, t: &Transform, r: &Ray) -> Option<Intersection>;
 }
 
 #[derive(Debug)]
@@ -31,7 +31,7 @@ pub struct Circle {
 }
 
 impl Shape for Circle {
-    fn intersects(&self, t: Transform, r: Ray) -> Option<Intersection> {
+    fn intersects(&self, t: &Transform, r: &Ray) -> Option<Intersection> {
         let ray_to_circ = t.pos - r.pos;
         let dir = Vector(r.ang.cos(), r.ang.sin());
         let proj = ray_to_circ.dot(dir);

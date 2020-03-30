@@ -1,8 +1,10 @@
 use super::shape::{Shape, Transform};
 use super::vector::Vector;
 
+#[derive(Debug)]
 pub enum Sense {}
 
+#[derive(Debug)]
 pub enum Action {
     Move(Transform),
 }

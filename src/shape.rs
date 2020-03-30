@@ -9,6 +9,7 @@ pub struct Ray {
     pub dir: Vector,
 }
 
+#[derive(Debug)]
 pub struct Transform {
     pub pos: Vector,
     pub rot: f64,

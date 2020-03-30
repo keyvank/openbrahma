@@ -1,4 +1,4 @@
-use super::shape::{Shape, Transform};
+use super::shape::{Ray, Shape, Transform};
 use super::vector::Vector;
 
 #[derive(Debug)]
@@ -10,6 +10,7 @@ pub enum Action {
 }
 
 pub trait Updatable {
+    fn shape(&self) -> &dyn Shape;
     fn update(&mut self, senses: Vec<Sense>) -> Vec<Action>;
 }
 

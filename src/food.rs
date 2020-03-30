@@ -10,4 +10,7 @@ impl<S: Shape> Updatable for Food<S> {
     fn update(&mut self, senses: Vec<Sense>) -> Vec<Action> {
         Vec::new()
     }
+    fn shape(&self) -> &dyn Shape {
+        &self.body
+    }
 }

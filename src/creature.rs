@@ -37,4 +37,7 @@ impl<S: Shape> Updatable for Creature<S> {
             rot: 0.0,
         })]
     }
+    fn shape(&self) -> &dyn Shape {
+        &self.body
+    }
 }

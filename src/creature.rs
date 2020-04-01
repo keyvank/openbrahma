@@ -2,7 +2,7 @@ use super::brain::{Brain, NeuronId};
 use super::sense::{Sense, Sensor};
 use super::shape::{Shape, Transform};
 use super::vector::Vector;
-use super::world::{Action, Updatable, World};
+use super::world::{Action, Updatable};
 
 pub struct Creature<S: Shape> {
     health: u32,

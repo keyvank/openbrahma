@@ -59,7 +59,7 @@ impl Brain {
         };
 
         for _ in 0..neuron_count {
-            let i = b.graph.add_node(Neuron {
+            b.graph.add_node(Neuron {
                 delta: 0i32,
                 energy: 0i32,
             });

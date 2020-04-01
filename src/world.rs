@@ -1,6 +1,5 @@
 use super::sense::{Sense, Sensor};
-use super::shape::{Intersection, Ray, Shape, Transform};
-use super::vector::Vector;
+use super::shape::{Shape, Transform};
 
 #[derive(Debug)]
 pub enum Action {

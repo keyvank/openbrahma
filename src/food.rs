@@ -1,6 +1,6 @@
 use super::sense::{Sense, Sensor};
 use super::shape::Shape;
-use super::world::{Action, Updatable, World};
+use super::world::{Action, Updatable};
 
 pub struct Food<S: Shape> {
     body: S,

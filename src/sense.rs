@@ -11,17 +11,20 @@ pub trait Sensor {
 }
 
 pub struct Eye {
-    ray: Ray,
     fov: f64,
     res: usize,
 }
 impl Sensor for Eye {
     fn sense(&self, u: &Object, w: &World) -> Sense {
+        let ray = Ray {
+            pos: u.trans.pos,
+            ang: u.trans.rot,
+        };
         let mut view = Vec::new();
         for i in -(self.res as i32 / 2)..(self.res as i32 / 2) {
             let ray = Ray {
-                pos: self.ray.pos,
-                ang: self.ray.ang + self.fov * (i as f64) / (self.res as f64),
+                pos: ray.pos,
+                ang: ray.ang + self.fov * (i as f64) / (self.res as f64),
             };
             view.push(
                 w.objects

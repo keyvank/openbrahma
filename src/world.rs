@@ -44,7 +44,7 @@ impl World {
                 obj.body
                     .sensors()
                     .iter()
-                    .map(|s| s.sense(&self))
+                    .map(|s| s.sense(&obj.body, &self))
                     .collect::<Vec<Sense>>()
             })
             .collect::<Vec<_>>();

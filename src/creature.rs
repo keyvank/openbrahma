@@ -29,8 +29,16 @@ impl<S: Shape> Creature<S> {
 impl<S: Shape> Updatable for Creature<S> {
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Action> {
         self.brain.update();
-        for &e in self.eye.iter() {
-            self.brain.stimulate(e, 3i32);
+        for sense in senses {
+            match sense {
+                Sense::Vision(pixels) => {
+                    for (&neuron, pixel) in self.eye.iter().zip(pixels.iter()) {
+                        if pixel.is_some() {
+                            self.brain.stimulate(neuron, 3i32);
+                        }
+                    }
+                }
+            }
         }
         let motor_deltas = self.brain.get_deltas(&self.motors);
         vec![Action::Move(Transform {

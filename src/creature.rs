@@ -1,5 +1,5 @@
 use super::brain::{Brain, NeuronId};
-use super::sense::{Sense, Sensor};
+use super::sense::{Eye, Sense, Sensor};
 use super::shape::{Shape, Transform};
 use super::vector::Vector;
 use super::world::{Action, Updatable};
@@ -42,6 +42,6 @@ impl<S: Shape> Updatable for Creature<S> {
         &self.body
     }
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {
-        Vec::new()
+        vec![Box::new(Eye { fov: 0.5, res: 10 })]
     }
 }

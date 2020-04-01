@@ -11,8 +11,8 @@ pub trait Sensor {
 }
 
 pub struct Eye {
-    fov: f64,
-    res: usize,
+    pub fov: f64,
+    pub res: usize,
 }
 impl Sensor for Eye {
     fn sense(&self, u: &Object, w: &World) -> Sense {

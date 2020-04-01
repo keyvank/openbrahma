@@ -47,7 +47,7 @@ impl Sensor for Eye {
 pub trait Updatable {
     fn shape(&self) -> &dyn Shape;
     fn sensors(&self) -> Vec<Box<dyn Sensor>>;
-    fn update(&mut self, senses: Vec<Sense>) -> Vec<Action>;
+    fn update(&mut self, senses: &Vec<Sense>) -> Vec<Action>;
 }
 
 pub struct Object {
@@ -75,12 +75,27 @@ impl World {
         self.objects.push(o);
     }
     pub fn update(&mut self) {
-        for obj in self.objects.iter_mut() {
-            for act in obj.body.update(Vec::new()) {
-                match act {
-                    Action::Move(t) => {}
+        let senses = self
+            .objects
+            .iter()
+            .map(|obj| {
+                obj.body
+                    .sensors()
+                    .iter()
+                    .map(|s| s.sense(&self))
+                    .collect::<Vec<Sense>>()
+            })
+            .collect::<Vec<_>>();
+
+        self.objects
+            .iter_mut()
+            .zip(senses.iter())
+            .for_each(|(obj, senses)| {
+                for act in obj.body.update(senses) {
+                    match act {
+                        Action::Move(t) => {}
+                    }
                 }
-            }
-        }
+            });
     }
 }

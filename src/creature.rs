@@ -26,7 +26,7 @@ impl<S: Shape> Creature<S> {
 }
 
 impl<S: Shape> Updatable for Creature<S> {
-    fn update(&mut self, senses: Vec<Sense>) -> Vec<Action> {
+    fn update(&mut self, senses: &Vec<Sense>) -> Vec<Action> {
         self.brain.update();
         for &e in self.eye.iter() {
             self.brain.stimulate(e, 3i32);

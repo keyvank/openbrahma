@@ -33,7 +33,7 @@ impl<S: Shape> Updatable for Creature<S> {
             match sense {
                 Sense::Vision(pixels) => {
                     for (&neuron, pixel) in self.eye.iter().zip(pixels.iter()) {
-                        if pixel.is_some() {
+                        if pixel.is_none() {
                             self.brain.stimulate(neuron, 3i32);
                         }
                     }
@@ -41,9 +41,11 @@ impl<S: Shape> Updatable for Creature<S> {
             }
         }
         let motor_deltas = self.brain.get_deltas(&self.motors);
+        let forward = Vector(1.0, 0.0) * ((motor_deltas[1] - motor_deltas[0]) as f64);
+        let rot = (motor_deltas[2] - motor_deltas[3]) as f64;
         vec![Action::Move(Transform {
-            pos: Vector(0.0, 0.0),
-            rot: 0.0,
+            pos: forward,
+            rot: rot,
         })]
     }
     fn shape(&self) -> &dyn Shape {

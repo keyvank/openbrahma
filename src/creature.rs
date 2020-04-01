@@ -1,7 +1,7 @@
 use super::brain::{Brain, NeuronId};
 use super::shape::{Shape, Transform};
 use super::vector::Vector;
-use super::world::{Action, Sense, Updatable, World};
+use super::world::{Action, Sense, Sensor, Updatable, World};
 
 pub struct Creature<S: Shape> {
     health: u32,
@@ -39,5 +39,8 @@ impl<S: Shape> Updatable for Creature<S> {
     }
     fn shape(&self) -> &dyn Shape {
         &self.body
+    }
+    fn sensors(&self) -> Vec<Box<dyn Sensor>> {
+        Vec::new()
     }
 }

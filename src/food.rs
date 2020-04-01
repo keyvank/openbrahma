@@ -1,5 +1,5 @@
 use super::shape::Shape;
-use super::world::{Action, Sense, Updatable, World};
+use super::world::{Action, Sense, Sensor, Updatable, World};
 
 pub struct Food<S: Shape> {
     body: S,
@@ -18,5 +18,8 @@ impl<S: Shape> Updatable for Food<S> {
     }
     fn shape(&self) -> &dyn Shape {
         &self.body
+    }
+    fn sensors(&self) -> Vec<Box<dyn Sensor>> {
+        Vec::new()
     }
 }

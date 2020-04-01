@@ -1,5 +1,5 @@
 use super::shape::{Intersection, Ray};
-use super::world::{Updatable, World};
+use super::world::{Object, Updatable, World};
 
 #[derive(Debug)]
 pub enum Sense {
@@ -7,7 +7,7 @@ pub enum Sense {
 }
 
 pub trait Sensor {
-    fn sense(&self, u: &Box<dyn Updatable>, w: &World) -> Sense;
+    fn sense(&self, u: &Object, w: &World) -> Sense;
 }
 
 pub struct Eye {
@@ -16,7 +16,7 @@ pub struct Eye {
     res: usize,
 }
 impl Sensor for Eye {
-    fn sense(&self, u: &Box<dyn Updatable>, w: &World) -> Sense {
+    fn sense(&self, u: &Object, w: &World) -> Sense {
         let mut view = Vec::new();
         for i in -(self.res as i32 / 2)..(self.res as i32 / 2) {
             let ray = Ray {

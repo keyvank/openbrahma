@@ -1,3 +1,4 @@
+use super::actuate::Actuator;
 use super::sense::{Sense, Sensor};
 use super::shape::Shape;
 use super::world::{Action, Updatable};
@@ -14,7 +15,7 @@ impl<S: Shape> Food<S> {
 }
 
 impl<S: Shape> Updatable for Food<S> {
-    fn update(&mut self, senses: &Vec<Sense>) -> Vec<Action> {
+    fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
         Vec::new()
     }
     fn shape(&self) -> &dyn Shape {

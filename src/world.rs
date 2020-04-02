@@ -1,3 +1,4 @@
+use super::actuate::Actuator;
 use super::sense::{Sense, Sensor};
 use super::shape::{Shape, Transform};
 
@@ -9,7 +10,7 @@ pub enum Action {
 pub trait Updatable {
     fn shape(&self) -> &dyn Shape;
     fn sensors(&self) -> Vec<Box<dyn Sensor>>;
-    fn update(&mut self, senses: &Vec<Sense>) -> Vec<Action>;
+    fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>>;
 }
 
 pub struct Object {
@@ -49,15 +50,11 @@ impl World {
             })
             .collect::<Vec<_>>();
 
-        self.objects
+        let actions = self
+            .objects
             .iter_mut()
             .zip(senses.iter())
-            .for_each(|(obj, senses)| {
-                for act in obj.body.update(senses) {
-                    match act {
-                        Action::Move(t) => {}
-                    }
-                }
-            });
+            .map(|(obj, senses)| obj.body.update(senses))
+            .collect::<Vec<_>>();
     }
 }

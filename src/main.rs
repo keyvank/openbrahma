@@ -27,7 +27,7 @@ fn main() {
     println!("Hello, Dharma!");
 
     let mut w = World::new();
-    w.add_object(Object::new(
+    w.add_object(
         Box::new(Creature::new(
             100,
             Brain::new(10000, 100),
@@ -40,7 +40,7 @@ fn main() {
             pos: Vector(0.0, 0.0),
             rot: 0.0,
         },
-    ));
+    );
 
     run(|| w.update());
 }

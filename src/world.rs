@@ -1,6 +1,7 @@
 use super::actuate::Actuator;
 use super::sense::{Sense, Sensor};
 use super::shape::{Shape, Transform};
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub enum Action {
@@ -14,34 +15,39 @@ pub trait Updatable {
 }
 
 pub struct Object {
+    id: usize,
     pub body: Box<dyn Updatable>,
     pub trans: Transform,
 }
 
 impl Object {
-    pub fn new(body: Box<dyn Updatable>, trans: Transform) -> Object {
-        Object { body, trans }
+    pub fn new(id: usize, body: Box<dyn Updatable>, trans: Transform) -> Object {
+        Object { id, body, trans }
     }
 }
 
 pub struct World {
-    pub objects: Vec<Object>,
+    pub objects: HashMap<usize, Object>,
+    pub next_id: usize,
 }
 
 impl World {
     pub fn new() -> World {
         World {
-            objects: Vec::new(),
+            objects: HashMap::new(),
+            next_id: 0,
         }
     }
-    pub fn add_object(&mut self, o: Object) {
-        self.objects.push(o);
+    pub fn add_object(&mut self, body: Box<dyn Updatable>, trans: Transform) {
+        self.objects
+            .insert(self.next_id, Object::new(self.next_id, body, trans));
+        self.next_id += 1;
     }
     pub fn update(&mut self) {
         let senses = self
             .objects
             .iter()
-            .map(|obj| {
+            .map(|(id, obj)| {
                 obj.body
                     .sensors()
                     .iter()
@@ -54,7 +60,7 @@ impl World {
             .objects
             .iter_mut()
             .zip(senses.iter())
-            .map(|(obj, senses)| obj.body.update(senses))
+            .map(|((id, obj), senses)| obj.body.update(senses))
             .collect::<Vec<_>>();
     }
 }

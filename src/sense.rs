@@ -29,7 +29,7 @@ impl Sensor for Eye {
             view.push(
                 w.objects
                     .iter()
-                    .map(|obj| obj.body.shape().intersects(&obj.trans, &ray))
+                    .map(|(_, obj)| obj.body.shape().intersects(&obj.trans, &ray))
                     .filter_map(|opt| opt)
                     .min_by(|a, b| {
                         a.dist

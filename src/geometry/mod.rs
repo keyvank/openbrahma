@@ -15,7 +15,7 @@ pub struct Ray {
 impl Ray {
     pub fn transform(&self, t: Transform) -> Self {
         Ray {
-            pos: self.pos.rotate(t.rot) + t.pos,
+            pos: self.pos.rotate(t.rot) + t.trans,
             ang: self.ang + t.rot,
         }
     }
@@ -24,14 +24,14 @@ impl Ray {
 use std::ops::Add;
 #[derive(Debug, Clone, Copy)]
 pub struct Transform {
-    pub pos: Vector,
-    pub rot: f64,
+    pub trans: Vector, // Translate
+    pub rot: f64,      // Rotate
 }
 impl Add<Transform> for Transform {
     type Output = Self;
     fn add(self, other: Self) -> Self {
         Self {
-            pos: self.pos + other.pos,
+            trans: self.trans + other.trans,
             rot: self.rot + other.rot,
         }
     }

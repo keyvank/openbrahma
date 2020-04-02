@@ -43,7 +43,7 @@ impl<S: Shape> Updatable for Creature<S> {
         let rot = (motor_deltas[2] - motor_deltas[3]) as f64;
         vec![Box::new(Move {
             trans: Transform {
-                pos: forward,
+                trans: forward,
                 rot: rot,
             },
         })]

@@ -39,7 +39,7 @@ fn main() {
             },
         )),
         Transform {
-            pos: Vector(0.0, 0.0),
+            trans: Vector(0.0, 0.0),
             rot: 0.0,
         },
     );

@@ -17,7 +17,7 @@ pub struct Eye {
 impl Sensor for Eye {
     fn sense(&self, u: &Object, w: &World) -> Sense {
         let ray = Ray {
-            pos: u.trans.pos,
+            pos: u.trans.trans,
             ang: u.trans.rot,
         };
         let mut view = Vec::new();

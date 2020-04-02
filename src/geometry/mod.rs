@@ -36,6 +36,14 @@ impl Add<Transform> for Transform {
         }
     }
 }
+impl Transform {
+    pub fn transform(&self, t: Self) -> Self {
+        Self {
+            trans: self.trans.rotate(t.rot) + t.trans,
+            rot: self.rot + t.rot,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct Intersection {

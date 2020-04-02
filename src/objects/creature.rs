@@ -1,4 +1,4 @@
-use crate::geometry::{Shape, Transform, Vector};
+use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Eye, Move, Sense, Sensor};
 use crate::{Brain, NeuronId, Updatable};
 
@@ -52,6 +52,13 @@ impl<S: Shape> Updatable for Creature<S> {
         &self.body
     }
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {
-        vec![Box::new(Eye { fov: 0.5, res: 10 })]
+        vec![Box::new(Eye {
+            ray: Ray {
+                pos: Vector(0.0, 0.0),
+                ang: 0.0,
+            },
+            fov: 0.5,
+            res: 10,
+        })]
     }
 }

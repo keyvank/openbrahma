@@ -71,5 +71,19 @@ impl World {
             })
             .flatten()
             .collect::<Vec<_>>();
+
+        for act in actions {
+            match act {
+                Action::Put(id, t) => {
+                    self.objects.get_mut(&id).unwrap().trans = t;
+                }
+                Action::Delete(id) => {
+                    self.objects.remove(&id);
+                }
+                Action::Create(body, trans) => {
+                    self.add_object(trans, body);
+                }
+            }
+        }
     }
 }

@@ -66,6 +66,7 @@ impl World {
                 actuators
                     .iter()
                     .map(|a| a.actuate(&obj, &self))
+                    .flatten()
                     .collect::<Vec<_>>()
             })
             .flatten()

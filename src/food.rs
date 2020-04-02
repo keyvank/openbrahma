@@ -1,7 +1,7 @@
 use super::actuate::Actuator;
 use super::sense::{Sense, Sensor};
 use super::shape::Shape;
-use super::world::{Action, Updatable};
+use super::world::Updatable;
 
 pub struct Food<S: Shape> {
     body: S,

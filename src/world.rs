@@ -1,12 +1,7 @@
-use super::actuate::Actuator;
+use super::actuate::{Action, Actuator};
 use super::sense::{Sense, Sensor};
 use super::shape::{Shape, Transform};
 use std::collections::HashMap;
-
-#[derive(Debug)]
-pub enum Action {
-    Move(Transform),
-}
 
 pub trait Updatable {
     fn shape(&self) -> &dyn Shape;
@@ -56,11 +51,24 @@ impl World {
             })
             .collect::<Vec<_>>();
 
-        let actions = self
+        let actuators = self
             .objects
             .iter_mut()
             .zip(senses.iter())
             .map(|((id, obj), senses)| obj.body.update(senses))
+            .collect::<Vec<_>>();
+
+        let actions = self
+            .objects
+            .iter()
+            .zip(actuators.iter())
+            .map(|((id, obj), actuators)| {
+                actuators
+                    .iter()
+                    .map(|a| a.actuate(&obj, &self))
+                    .collect::<Vec<_>>()
+            })
+            .flatten()
             .collect::<Vec<_>>();
     }
 }

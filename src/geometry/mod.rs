@@ -12,6 +12,14 @@ pub struct Ray {
     pub pos: Vector,
     pub ang: f64,
 }
+impl Ray {
+    pub fn transform(&self, t: Transform) -> Self {
+        Ray {
+            pos: self.pos.rotate(t.rot) + t.pos,
+            ang: self.ang + t.rot,
+        }
+    }
+}
 
 use std::ops::Add;
 #[derive(Debug, Clone, Copy)]

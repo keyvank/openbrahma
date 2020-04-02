@@ -18,6 +18,15 @@ impl Vector {
         let sin = ang.sin();
         Self(self.0 * cos - self.1 * sin, self.0 * sin + self.1 * cos)
     }
+    pub fn zero() -> Self {
+        Vector(0.0, 0.0)
+    }
+    pub fn i() -> Self {
+        Vector(1.0, 0.0)
+    }
+    pub fn j() -> Self {
+        Vector(0.0, 1.0)
+    }
 }
 
 impl Add<Vector> for Vector {

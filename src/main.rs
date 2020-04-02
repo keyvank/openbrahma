@@ -39,7 +39,7 @@ fn main() {
             },
         )),
         Transform {
-            trans: Vector(0.0, 0.0),
+            trans: Vector::zero(),
             rot: 0.0,
         },
     );

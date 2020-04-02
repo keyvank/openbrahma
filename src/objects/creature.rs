@@ -39,7 +39,7 @@ impl<S: Shape> Updatable for Creature<S> {
             }
         }
         let motor_deltas = self.brain.get_deltas(&self.motors);
-        let forward = Vector(1.0, 0.0) * ((motor_deltas[1] - motor_deltas[0]) as f64);
+        let forward = Vector::i() * ((motor_deltas[1] - motor_deltas[0]) as f64);
         let rot = (motor_deltas[2] - motor_deltas[3]) as f64;
         vec![Box::new(Move {
             trans: Transform {
@@ -54,7 +54,7 @@ impl<S: Shape> Updatable for Creature<S> {
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {
         vec![Box::new(Eye {
             ray: Ray {
-                pos: Vector(0.0, 0.0),
+                pos: Vector::zero(),
                 ang: 0.0,
             },
             fov: 0.5,

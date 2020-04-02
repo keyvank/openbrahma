@@ -3,19 +3,19 @@ use super::vector::Vector;
 #[derive(Debug, Clone)]
 pub struct Color(pub f64);
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Ray {
     pub pos: Vector,
     pub ang: f64,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Transform {
     pub pos: Vector,
     pub rot: f64,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Intersection {
     pub dist: f64,
     pub col: Color,
@@ -25,7 +25,7 @@ pub trait Shape {
     fn intersects(&self, t: &Transform, r: &Ray) -> Option<Intersection>;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Circle {
     pub r: f64,
     pub col: Color,

@@ -1,9 +1,5 @@
-use super::actuate::{Actuator, Move};
-use super::brain::{Brain, NeuronId};
-use super::sense::{Eye, Sense, Sensor};
-use super::shape::{Shape, Transform};
-use super::vector::Vector;
-use super::world::Updatable;
+use crate::geometry::{Shape, Transform, Vector};
+use crate::{Actuator, Brain, Eye, Move, NeuronId, Sense, Sensor, Updatable};
 
 pub struct Creature<S: Shape> {
     health: u32,

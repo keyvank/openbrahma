@@ -1,7 +1,5 @@
-use super::actuate::Actuator;
-use super::sense::{Sense, Sensor};
-use super::shape::Shape;
-use super::world::Updatable;
+use crate::geometry::Shape;
+use crate::{Actuator, Sense, Sensor, Updatable};
 
 pub struct Food<S: Shape> {
     body: S,

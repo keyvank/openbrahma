@@ -1,6 +1,5 @@
-use super::actuate::{Action, Actuator};
-use super::sense::{Sense, Sensor};
-use super::shape::{Shape, Transform};
+use crate::geometry::{Shape, Transform};
+use crate::{Action, Actuator, Sense, Sensor};
 use std::collections::HashMap;
 
 pub trait Updatable {

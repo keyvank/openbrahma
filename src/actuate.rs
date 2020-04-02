@@ -1,5 +1,5 @@
-use super::shape::Transform;
-use super::world::{Object, Updatable, World};
+use crate::geometry::Transform;
+use crate::{Object, Updatable, World};
 
 pub enum Action {
     Create(Transform, Box<dyn Updatable>),

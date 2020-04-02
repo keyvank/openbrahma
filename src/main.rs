@@ -1,6 +1,7 @@
 extern crate openbrahma;
 
-use openbrahma::{Brain, Circle, Color, Creature, Object, Transform, Vector, World};
+use openbrahma::geometry::{Circle, Color, Transform, Vector};
+use openbrahma::{Brain, Creature, Object, World};
 
 fn run<F>(mut f: F)
 where

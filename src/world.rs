@@ -78,7 +78,7 @@ impl World {
                     self.objects.get_mut(&id).unwrap().trans = t;
                 }
                 Action::Delete(id) => {
-                    self.objects.remove(&id);
+                    self.objects.remove(&id).unwrap();
                 }
                 Action::Create(body, trans) => {
                     self.add_object(trans, body);

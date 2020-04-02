@@ -13,6 +13,11 @@ impl Vector {
     pub fn norm(self) -> Self {
         self / self.len()
     }
+    pub fn rotate(self, ang: f64) -> Self {
+        let cos = ang.cos();
+        let sin = ang.sin();
+        Self(self.0 * cos - self.1 * sin, self.0 * sin + self.1 * cos)
+    }
 }
 
 impl Add<Vector> for Vector {

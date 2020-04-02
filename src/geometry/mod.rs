@@ -13,10 +13,20 @@ pub struct Ray {
     pub ang: f64,
 }
 
+use std::ops::Add;
 #[derive(Debug, Clone)]
 pub struct Transform {
     pub pos: Vector,
     pub rot: f64,
+}
+impl Add<Transform> for Transform {
+    type Output = Self;
+    fn add(self, other: Self) -> Self {
+        Self {
+            pos: self.pos + other.pos,
+            rot: self.rot + other.rot,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

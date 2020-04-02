@@ -1,5 +1,6 @@
 use crate::geometry::{Shape, Transform, Vector};
-use crate::{Actuator, Brain, Eye, Move, NeuronId, Sense, Sensor, Updatable};
+use crate::io::{Actuator, Eye, Move, Sense, Sensor};
+use crate::{Brain, NeuronId, Updatable};
 
 pub struct Creature<S: Shape> {
     health: u32,

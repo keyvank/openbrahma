@@ -1,5 +1,6 @@
 use crate::geometry::Shape;
-use crate::{Actuator, Sense, Sensor, Updatable};
+use crate::io::{Actuator, Sense, Sensor};
+use crate::Updatable;
 
 pub struct Food<S: Shape> {
     body: S,

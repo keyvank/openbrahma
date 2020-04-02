@@ -1,5 +1,5 @@
 use crate::geometry::{Shape, Transform};
-use crate::{Action, Actuator, Sense, Sensor};
+use crate::io::{Action, Actuator, Sense, Sensor};
 use std::collections::HashMap;
 
 pub trait Updatable {

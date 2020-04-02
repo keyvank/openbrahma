@@ -5,7 +5,7 @@ pub trait Shape {
     fn intersects(&self, t: &Transform, r: &Ray) -> Option<Intersection>;
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct Circle {
     pub r: f64,
     pub col: Color,

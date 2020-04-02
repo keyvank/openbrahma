@@ -10,7 +10,7 @@ pub trait Updatable {
 }
 
 pub struct Object {
-    id: usize,
+    pub id: usize,
     pub body: Box<dyn Updatable>,
     pub trans: Transform,
 }

@@ -16,6 +16,6 @@ pub struct Move {
 }
 impl Actuator for Move {
     fn actuate(&self, u: &Object, w: &World) -> Vec<Action> {
-        Vec::new()
+        vec![Action::Put(u.id, u.trans.clone())]
     }
 }

@@ -1,8 +1,14 @@
+extern crate glutin_window;
+extern crate graphics;
 extern crate openbrahma;
+extern crate opengl_graphics;
+extern crate piston;
 
 use openbrahma::geometry::{Circle, Color, Transform, Vector};
 use openbrahma::objects::{Creature, Food};
 use openbrahma::{Brain, Object, World};
+
+mod graphical;
 
 fn run<F>(mut f: F)
 where
@@ -44,5 +50,5 @@ fn main() {
         },
     );
 
-    run(|| w.update());
+    graphical::simulate(&mut w);
 }

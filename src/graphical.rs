@@ -28,6 +28,7 @@ impl<'a> App<'a> {
                 (
                     o.trans.trans * SCALE,
                     o.body.shape().bounding_circle().r * SCALE,
+                    o.body.shape().bounding_circle().col,
                 )
             })
             .collect::<Vec<_>>();
@@ -37,11 +38,11 @@ impl<'a> App<'a> {
 
             clear(BLACK, gl);
 
-            for (p, r) in circs {
+            for (p, r, col) in circs {
                 let square = rectangle::square(0.0, 0.0, r);
                 let pos = center + p;
                 let transform = c.transform.trans(pos.0, pos.1).trans(-r / 2.0, -r / 2.0);
-                ellipse(WHITE, square, transform, gl);
+                ellipse([col.0, col.1, col.2, 1.0], square, transform, gl);
             }
         });
     }

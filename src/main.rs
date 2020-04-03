@@ -38,10 +38,10 @@ fn main() {
     w.add_object(
         Box::new(Creature::new(
             100,
-            Brain::new(10000, 100),
+            Brain::new(1000, 100),
             Circle {
                 r: 20.0,
-                col: Color(0.5),
+                col: Color::white(),
             },
         )),
         Transform {
@@ -54,7 +54,7 @@ fn main() {
             50,
             Circle {
                 r: 10.0,
-                col: Color(0.5),
+                col: Color::blue(),
             },
         )),
         Transform {

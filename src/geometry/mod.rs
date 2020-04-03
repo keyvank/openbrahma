@@ -5,7 +5,24 @@ pub use shape::*;
 pub use vector::*;
 
 #[derive(Debug, Clone, Copy)]
-pub struct Color(pub f64);
+pub struct Color(pub f32, pub f32, pub f32);
+impl Color {
+    pub fn red() -> Color {
+        Color(1.0, 0.0, 0.0)
+    }
+    pub fn green() -> Color {
+        Color(0.0, 1.0, 0.0)
+    }
+    pub fn blue() -> Color {
+        Color(0.0, 0.0, 1.0)
+    }
+    pub fn white() -> Color {
+        Color(1.0, 1.0, 1.0)
+    }
+    pub fn black() -> Color {
+        Color(0.0, 0.0, 0.0)
+    }
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct Ray {

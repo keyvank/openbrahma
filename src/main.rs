@@ -49,6 +49,19 @@ fn main() {
             rot: 0.0,
         },
     );
+    w.add_object(
+        Box::new(Food::new(
+            50,
+            Circle {
+                r: 10.0,
+                col: Color(0.5),
+            },
+        )),
+        Transform {
+            trans: Vector(70.0, 40.0),
+            rot: 0.0,
+        },
+    );
 
     graphical::simulate(&mut w);
 }

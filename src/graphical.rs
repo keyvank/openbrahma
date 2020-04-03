@@ -1,5 +1,6 @@
 use glutin_window::GlutinWindow as Window;
 use graphics::*;
+use openbrahma::geometry::Vector;
 use openbrahma::World;
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
@@ -10,6 +11,7 @@ const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
 const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
 const WIDTH: u32 = 640;
 const HEIGHT: u32 = 480;
+const SCALE: f64 = 3.0;
 
 pub struct App<'a> {
     gl: GlGraphics,
@@ -18,13 +20,29 @@ pub struct App<'a> {
 
 impl<'a> App<'a> {
     fn render(&mut self, args: &RenderArgs) {
+        let circs = self
+            .world
+            .objects
+            .values()
+            .map(|o| {
+                (
+                    o.trans.trans * SCALE,
+                    o.body.shape().bounding_circle().r * SCALE,
+                )
+            })
+            .collect::<Vec<_>>();
+
         self.gl.draw(args.viewport(), |c, gl| {
+            let center = Vector(args.window_size[0] / 2.0, args.window_size[1] / 2.0);
+
             clear(BLACK, gl);
 
-            let square = rectangle::square(0.0, 0.0, 50.0);
-            let (x, y) = (args.window_size[0] / 2.0, args.window_size[1] / 2.0);
-            let transform = c.transform.trans(x, y).trans(-25.0, -25.0);
-            rectangle(WHITE, square, transform, gl);
+            for (p, r) in circs {
+                let square = rectangle::square(0.0, 0.0, r);
+                let pos = center + p;
+                let transform = c.transform.trans(pos.0, pos.1).trans(-r / 2.0, -r / 2.0);
+                ellipse(WHITE, square, transform, gl);
+            }
         });
     }
 

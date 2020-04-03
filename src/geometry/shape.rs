@@ -3,6 +3,7 @@ use super::{Color, Intersection, Ray, Transform};
 
 pub trait Shape {
     fn intersects(&self, t: &Transform, r: &Ray) -> Option<Intersection>;
+    fn bounding_circle(&self) -> Circle;
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -35,5 +36,9 @@ impl Shape for Circle {
         } else {
             None
         }
+    }
+
+    fn bounding_circle(&self) -> Circle {
+        *self
     }
 }

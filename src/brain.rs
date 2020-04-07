@@ -1,4 +1,3 @@
-use petgraph::visit::EdgeRef;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::collections::HashMap;
@@ -23,7 +22,7 @@ impl Neuron {
             self.energy += power;
             if self.energy > THRESHOLD {
                 self.energy = REST;
-                return true; // TODO: Means neuron should fire!
+                return true;
             }
         }
         return false;
@@ -39,54 +38,53 @@ impl Neuron {
     }
 }
 
-use petgraph::graph::NodeIndex;
-use petgraph::stable_graph::StableGraph;
-
-pub type NeuronId = NodeIndex;
+pub type Weight = i32;
+pub type NeuronId = usize;
 
 pub struct Brain {
-    graph: StableGraph<Neuron, i32>,
-    neurons: Vec<NeuronId>,
+    neurons: HashMap<NeuronId, (Neuron, Vec<(Weight, NeuronId)>)>,
+    neuron_id: NeuronId,
 }
 
 impl Brain {
+    pub fn add_neuron(&mut self, n: Neuron) {
+        self.neurons.insert(self.neuron_id, (n, Vec::new()));
+        self.neuron_id += 1;
+    }
+
     pub fn new(neuron_count: usize, connection_count: usize) -> Brain {
         let mut rng = thread_rng();
 
         let mut b = Brain {
-            graph: StableGraph::new(),
-            neurons: Vec::new(),
+            neurons: HashMap::new(),
+            neuron_id: 0,
         };
 
         for _ in 0..neuron_count {
-            b.graph.add_node(Neuron {
+            b.add_neuron(Neuron {
                 delta: 0i32,
                 energy: 0i32,
             });
         }
 
-        b.update_neurons();
-
-        for &src in b.neurons.iter() {
-            for &dst in b.neurons.choose_multiple(&mut rng, connection_count) {
-                b.graph.add_edge(src, dst, WEIGHT);
+        let ids = b.neurons.keys().copied().collect::<Vec<NeuronId>>();
+        for (id, (neuron, edges)) in b.neurons.iter_mut() {
+            for &to in ids.choose_multiple(&mut rng, connection_count) {
+                edges.push((WEIGHT, to));
             }
         }
 
         b
     }
 
-    fn update_neurons(&mut self) {
-        self.neurons = self.graph.node_indices().collect();
-    }
-
     pub fn stimulate(&mut self, index: NeuronId, power: i32) {
-        let mut nodes = vec![(index, power)];
+        let mut nodes = vec![(power, index)];
         while !nodes.is_empty() {
-            let (ix, pow) = nodes.remove(0);
-            if self.graph.node_weight_mut(ix).unwrap().stimulate(pow) {
-                for neigh in self.graph.edges(ix) {
-                    nodes.push((neigh.target(), *neigh.weight()));
+            let (pow, ix) = nodes.remove(0);
+            let (neuron, edges) = self.neurons.get_mut(&ix).unwrap();
+            if neuron.stimulate(pow) {
+                for edge in edges {
+                    nodes.push(*edge);
                 }
             }
         }
@@ -95,6 +93,9 @@ impl Brain {
     pub fn random_neurons(&self, count: usize) -> Vec<NeuronId> {
         let mut rng = thread_rng();
         self.neurons
+            .keys()
+            .copied()
+            .collect::<Vec<_>>()
             .choose_multiple(&mut rng, count)
             .copied()
             .collect()
@@ -103,11 +104,11 @@ impl Brain {
     pub fn get_deltas(&self, neurons: &Vec<NeuronId>) -> Vec<i32> {
         neurons
             .iter()
-            .map(|&id| self.graph.node_weight(id).unwrap().delta)
+            .map(|&id| self.neurons[&id].0.delta)
             .collect()
     }
 
-    fn pop_region(&mut self, len: usize) -> HashMap<NeuronId, Vec<(NeuronId, i32)>> {
+    /*fn pop_region(&mut self, len: usize) -> HashMap<NeuronId, Vec<(NeuronId, i32)>> {
         let start = self.random_neurons(1)[0];
 
         let mut ret = HashMap::new();
@@ -169,11 +170,11 @@ impl Brain {
                 self.graph.add_edge(*src, *dst, w);
             }
         }
-    }
+    }*/
 
     pub fn update(&mut self) {
-        for &i in self.neurons.iter() {
-            self.graph.node_weight_mut(i).unwrap().update();
+        for (n, _) in self.neurons.values_mut() {
+            n.update();
         }
     }
 }

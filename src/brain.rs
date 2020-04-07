@@ -2,19 +2,22 @@ use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::collections::HashMap;
 
-const LEAK: i32 = 1i32;
-const THRESHOLD: i32 = 50i32;
-const REST: i32 = -10i32;
-const WEIGHT: i32 = 3i32;
+pub type Weight = i32;
+pub type NeuronId = usize;
+
+const LEAK: Weight = 1i32;
+const THRESHOLD: Weight = 50i32;
+const REST: Weight = -10i32;
+const WEIGHT: Weight = 3i32;
 
 #[derive(Debug, Clone)]
 pub struct Neuron {
     pub energy: i32,
-    pub delta: i32,
+    pub delta: Weight,
 }
 
 impl Neuron {
-    pub fn stimulate(&mut self, power: i32) -> bool {
+    pub fn stimulate(&mut self, power: Weight) -> bool {
         self.delta += power;
 
         // If not resting
@@ -37,9 +40,6 @@ impl Neuron {
         }
     }
 }
-
-pub type Weight = i32;
-pub type NeuronId = usize;
 
 pub struct Brain {
     neurons: HashMap<NeuronId, (Neuron, Vec<(Weight, NeuronId)>)>,
@@ -77,7 +77,7 @@ impl Brain {
         b
     }
 
-    pub fn stimulate(&mut self, index: NeuronId, power: i32) {
+    pub fn stimulate(&mut self, index: NeuronId, power: Weight) {
         let mut nodes = vec![(power, index)];
         while !nodes.is_empty() {
             let (pow, ix) = nodes.remove(0);
@@ -101,7 +101,7 @@ impl Brain {
             .collect()
     }
 
-    pub fn get_deltas(&self, neurons: &Vec<NeuronId>) -> Vec<i32> {
+    pub fn get_deltas(&self, neurons: &Vec<NeuronId>) -> Vec<Weight> {
         neurons
             .iter()
             .map(|&id| self.neurons[&id].0.delta)

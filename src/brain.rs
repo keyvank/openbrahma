@@ -75,7 +75,7 @@ impl Brain {
             });
         }
 
-        let ids = b.neurons.keys().copied().collect::<Vec<NeuronId>>();
+        let ids = b.neuron_ids();
         for (id, (neuron, edges)) in b.neurons.iter_mut() {
             for &to in ids.choose_multiple(&mut rng, connection_count) {
                 edges.push((WEIGHT, to));
@@ -98,12 +98,13 @@ impl Brain {
         }
     }
 
+    pub fn neuron_ids(&self) -> Vec<NeuronId> {
+        self.neurons.keys().copied().collect::<Vec<_>>()
+    }
+
     pub fn random_neurons(&self, count: usize) -> Vec<NeuronId> {
         let mut rng = thread_rng();
-        self.neurons
-            .keys()
-            .copied()
-            .collect::<Vec<_>>()
+        self.neuron_ids()
             .choose_multiple(&mut rng, count)
             .copied()
             .collect()
@@ -118,16 +119,15 @@ impl Brain {
 
     pub fn crossover(&mut self, b: &Brain) {
         let mut rng = thread_rng();
+        let ids = self.neuron_ids();
         for (id, (neuron, axons)) in b.neurons.iter() {
             if rng.gen::<bool>() {
-                for (_, nid) in axons.iter() {
-                    self.neurons
-                        .entry(*nid)
-                        .or_insert((Neuron::new(), Vec::new()));
-                }
                 let nn = self.neurons.entry(*id).or_insert((*neuron, Vec::new()));
-                for (nw, nid) in axons {
-                    nn.1.push((*nw, *nid));
+                nn.1.clear();
+                for (new_weight, new_id) in axons {
+                    if ids.contains(new_id) {
+                        nn.1.push((*new_weight, *new_id));
+                    }
                 }
             }
         }

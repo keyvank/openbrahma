@@ -1,5 +1,5 @@
 use rand::seq::SliceRandom;
-use rand::thread_rng;
+use rand::{thread_rng, Rng};
 use std::collections::HashMap;
 
 pub type Weight = i32;
@@ -11,13 +11,20 @@ const THRESHOLD: Weight = 50i32;
 const REST: Weight = -10i32;
 const WEIGHT: Weight = 3i32;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct Neuron {
     pub energy: Weight,
     pub delta: Weight,
 }
 
 impl Neuron {
+    pub fn new() -> Neuron {
+        Neuron {
+            energy: 0,
+            delta: 0,
+        }
+    }
+
     pub fn stimulate(&mut self, power: Weight) -> bool {
         self.delta += power;
 
@@ -109,69 +116,22 @@ impl Brain {
             .collect()
     }
 
-    /*fn pop_region(&mut self, len: usize) -> HashMap<NeuronId, Vec<(NeuronId, i32)>> {
-        let start = self.random_neurons(1)[0];
-
-        let mut ret = HashMap::new();
-        ret.insert(start, Vec::new());
-
-        let mut edges = Vec::new();
-
-        let mut queue = vec![start];
-
-        for _ in 0..len {
-            if queue.is_empty() {
-                break;
-            }
-            let src = queue.remove(0);
-            for neigh in self.graph.edges(src) {
-                let dst = neigh.target();
-                if ret.contains_key(&dst) || ret.len() < len {
-                    queue.push(dst);
-                    ret.entry(dst).or_insert(Vec::new());
-                    if !edges.contains(&neigh.id()) {
-                        ret.get_mut(&src).unwrap().push((dst, *neigh.weight()));
-                        edges.push(neigh.id());
-                    }
+    pub fn crossover(&mut self, b: &Brain) {
+        let mut rng = thread_rng();
+        for (id, (neuron, axons)) in b.neurons.iter() {
+            if rng.gen::<bool>() {
+                for (_, nid) in axons.iter() {
+                    self.neurons
+                        .entry(*nid)
+                        .or_insert((Neuron::new(), Vec::new()));
+                }
+                let nn = self.neurons.entry(*id).or_insert((*neuron, Vec::new()));
+                for (nw, nid) in axons {
+                    nn.1.push((*nw, *nid));
                 }
             }
         }
-
-        for ix in edges {
-            self.graph.remove_edge(ix);
-        }
-
-        ret
     }
-
-    pub fn crossover(&mut self, b: &mut Brain, len: usize) {
-        let reg_a = self.pop_region(len);
-        let reg_b = b.pop_region(len);
-        let a_to_b = reg_a
-            .keys()
-            .copied()
-            .zip(reg_b.keys().copied())
-            .collect::<HashMap<_, _>>();
-        let b_to_a = reg_b
-            .keys()
-            .copied()
-            .zip(reg_a.keys().copied())
-            .collect::<HashMap<_, _>>();
-        for (k, v) in reg_a {
-            let src = a_to_b.get(&k).unwrap();
-            for (dst, w) in v {
-                let dst = a_to_b.get(&dst).unwrap();
-                b.graph.add_edge(*src, *dst, w);
-            }
-        }
-        for (k, v) in reg_b {
-            let src = b_to_a.get(&k).unwrap();
-            for (dst, w) in v {
-                let dst = b_to_a.get(&dst).unwrap();
-                self.graph.add_edge(*src, *dst, w);
-            }
-        }
-    }*/
 
     pub fn update(&mut self) {
         for (n, _) in self.neurons.values_mut() {

@@ -1,4 +1,5 @@
 mod brain;
+pub mod dharma;
 pub mod geometry;
 pub mod io;
 pub mod objects;

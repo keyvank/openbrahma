@@ -1,5 +1,7 @@
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
+use serde::{Deserialize, Serialize};
+use serde_json::Result;
 use std::collections::HashMap;
 
 pub type Weight = i32;
@@ -11,7 +13,7 @@ const THRESHOLD: Weight = 50i32;
 const REST: Weight = -10i32;
 const WEIGHT: Weight = 3i32;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Neuron {
     pub energy: Weight,
     pub delta: Weight,
@@ -49,7 +51,7 @@ impl Neuron {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Brain {
     neurons: HashMap<NeuronId, (Neuron, Vec<Axon>)>,
     neuron_id: NeuronId,

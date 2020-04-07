@@ -2,6 +2,8 @@ use crate::geometry::{Shape, Transform};
 use crate::io::{Action, Actuator, Sense, Sensor};
 use std::collections::HashMap;
 
+pub type ObjectId = usize;
+
 pub trait Updatable {
     fn shape(&self) -> &dyn Shape;
     fn sensors(&self) -> Vec<Box<dyn Sensor>>;
@@ -9,20 +11,20 @@ pub trait Updatable {
 }
 
 pub struct Object {
-    pub id: usize,
+    pub id: ObjectId,
     pub body: Box<dyn Updatable>,
     pub trans: Transform,
 }
 
 impl Object {
-    pub fn new(id: usize, body: Box<dyn Updatable>, trans: Transform) -> Object {
+    pub fn new(id: ObjectId, body: Box<dyn Updatable>, trans: Transform) -> Object {
         Object { id, body, trans }
     }
 }
 
 pub struct World {
-    pub objects: HashMap<usize, Object>,
-    pub next_id: usize,
+    pub objects: HashMap<ObjectId, Object>,
+    pub next_id: ObjectId,
 }
 
 impl World {

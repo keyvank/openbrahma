@@ -1,10 +1,10 @@
 use crate::geometry::Transform;
-use crate::{Object, Updatable, World};
+use crate::{Object, ObjectId, Updatable, World};
 
 pub enum Action {
     Create(Transform, Box<dyn Updatable>),
-    Delete(usize),
-    Put(usize, Transform),
+    Delete(ObjectId),
+    Put(ObjectId, Transform),
 }
 
 pub trait Actuator {

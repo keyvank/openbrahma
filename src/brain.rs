@@ -49,6 +49,7 @@ impl Neuron {
     }
 }
 
+#[derive(Clone)]
 pub struct Brain {
     neurons: HashMap<NeuronId, (Neuron, Vec<Axon>)>,
     neuron_id: NeuronId,

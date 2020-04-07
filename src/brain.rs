@@ -4,6 +4,7 @@ use std::collections::HashMap;
 
 pub type Weight = i32;
 pub type NeuronId = usize;
+pub type Axon = (Weight, NeuronId);
 
 const LEAK: Weight = 1i32;
 const THRESHOLD: Weight = 50i32;
@@ -12,7 +13,7 @@ const WEIGHT: Weight = 3i32;
 
 #[derive(Debug, Clone)]
 pub struct Neuron {
-    pub energy: i32,
+    pub energy: Weight,
     pub delta: Weight,
 }
 
@@ -42,7 +43,7 @@ impl Neuron {
 }
 
 pub struct Brain {
-    neurons: HashMap<NeuronId, (Neuron, Vec<(Weight, NeuronId)>)>,
+    neurons: HashMap<NeuronId, (Neuron, Vec<Axon>)>,
     neuron_id: NeuronId,
 }
 

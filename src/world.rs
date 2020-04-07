@@ -75,15 +75,13 @@ impl World {
 
         for act in actions {
             match act {
-                Action::Put(id, t) => {
-                    self.objects.get_mut(&id).unwrap().trans = t;
-                }
                 Action::Delete(id) => {
                     self.objects.remove(&id).unwrap();
                 }
                 Action::Create(body, trans) => {
                     self.add_object(trans, body);
                 }
+                Action::Update(id, f) => f(self.objects.get_mut(&id).unwrap()),
             }
         }
     }

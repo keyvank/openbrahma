@@ -4,7 +4,7 @@ use crate::{Object, ObjectId, Updatable, World};
 pub enum Action {
     Create(Transform, Box<dyn Updatable>),
     Delete(ObjectId),
-    Put(ObjectId, Transform),
+    Update(ObjectId, Box<dyn FnOnce(&mut Object)>),
 }
 
 pub trait Actuator {
@@ -16,6 +16,12 @@ pub struct Move {
 }
 impl Actuator for Move {
     fn actuate(&self, u: &Object, w: &World) -> Vec<Action> {
-        vec![Action::Put(u.id, self.trans.transform(u.trans))]
+        let trans = self.trans.transform(u.trans);
+        vec![Action::Update(
+            u.id,
+            Box::new(move |o: &mut Object| {
+                o.trans = trans;
+            }),
+        )]
     }
 }

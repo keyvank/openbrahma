@@ -54,6 +54,7 @@ impl Neuron {
 pub struct Brain {
     neurons: HashMap<NeuronId, (Neuron, Vec<Axon>)>,
     neuron_id: NeuronId,
+    connectivity: usize,
 }
 
 impl Brain {
@@ -62,12 +63,13 @@ impl Brain {
         self.neuron_id += 1;
     }
 
-    pub fn new(neuron_count: usize, connection_count: usize) -> Brain {
+    pub fn new(neuron_count: usize, connectivity: usize) -> Brain {
         let mut rng = thread_rng();
 
         let mut b = Brain {
             neurons: HashMap::new(),
             neuron_id: 0,
+            connectivity: connectivity,
         };
 
         for _ in 0..neuron_count {
@@ -79,7 +81,7 @@ impl Brain {
 
         let ids = b.neuron_ids();
         for (id, (neuron, edges)) in b.neurons.iter_mut() {
-            for &to in ids.choose_multiple(&mut rng, connection_count) {
+            for &to in ids.choose_multiple(&mut rng, connectivity) {
                 edges.push((WEIGHT, to));
             }
         }
@@ -130,6 +132,19 @@ impl Brain {
                     if ids.contains(new_id) {
                         nn.1.push((*new_weight, *new_id));
                     }
+                }
+            }
+        }
+    }
+
+    pub fn mutate(&mut self, rate: f32) {
+        let mut rng = thread_rng();
+        let ids = self.neuron_ids();
+        for (id, (neuron, edges)) in self.neurons.iter_mut() {
+            if rng.gen::<f32>() < rate {
+                edges.clear();
+                for &to in ids.choose_multiple(&mut rng, self.connectivity) {
+                    edges.push((WEIGHT, to));
                 }
             }
         }

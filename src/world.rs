@@ -10,6 +10,7 @@ pub trait Corpus {
     fn sensors(&self) -> Vec<Box<dyn Sensor>>;
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>>;
     fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
 }
 
 pub struct Object {

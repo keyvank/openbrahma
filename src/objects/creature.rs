@@ -4,7 +4,7 @@ use crate::{Brain, Corpus, NeuronId};
 use std::any::Any;
 
 pub struct Creature {
-    health: u32,
+    pub health: u32,
     brain: Brain,
     body: Box<dyn Shape>,
     eye: Vec<NeuronId>,
@@ -80,6 +80,9 @@ impl Corpus for Creature {
         ]
     }
     fn as_any(&self) -> &dyn Any {
+        self
+    }
+    fn as_any_mut(&mut self) -> &mut dyn Any {
         self
     }
 }

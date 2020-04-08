@@ -5,7 +5,7 @@ use std::any::Any;
 
 pub struct Food {
     body: Box<dyn Shape>,
-    health: u32,
+    pub health: u32,
 }
 
 impl Food {
@@ -25,6 +25,9 @@ impl Corpus for Food {
         Vec::new()
     }
     fn as_any(&self) -> &dyn Any {
+        self
+    }
+    fn as_any_mut(&mut self) -> &mut dyn Any {
         self
     }
 }

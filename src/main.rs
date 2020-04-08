@@ -5,7 +5,7 @@ extern crate opengl_graphics;
 extern crate piston;
 
 use openbrahma::dharma::{Dharma, LifespanScoring};
-use openbrahma::geometry::{Circle, Color, Transform, Vector};
+use openbrahma::geometry::{Color, Transform, Vector};
 use openbrahma::objects::{Creature, Food};
 use openbrahma::{Brain, World};
 

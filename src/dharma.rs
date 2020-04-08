@@ -1,4 +1,4 @@
-use crate::geometry::{Circle, Color, Transform, Vector};
+use crate::geometry::{Color, Shape, Transform, Vector};
 use crate::objects::{Creature, Food};
 use crate::{Brain, World};
 use std::marker::PhantomData;
@@ -21,10 +21,10 @@ impl ScoringSystem for LifespanScoring {
         w.add_object(
             Box::new(Food::new(
                 50,
-                Box::new(Circle {
+                Shape::Circle {
                     r: 10.0,
                     col: Color::blue(),
-                }),
+                },
             )),
             Transform {
                 trans: Vector(70.0, 40.0),
@@ -34,10 +34,10 @@ impl ScoringSystem for LifespanScoring {
         w.add_object(
             Box::new(Food::new(
                 50,
-                Box::new(Circle {
+                Shape::Circle {
                     r: 10.0,
                     col: Color::blue(),
-                }),
+                },
             )),
             Transform {
                 trans: Vector(-70.0, -40.0),
@@ -69,10 +69,10 @@ impl<S: ScoringSystem> Dharma<S> {
             let c = Box::new(Creature::new(
                 10000,
                 Brain::new(1000, 100),
-                Box::new(Circle {
+                Shape::Circle {
                     r: 20.0,
                     col: Color::white(),
-                }),
+                },
             ));
             println!("Score: {}", S::score(c));
         }

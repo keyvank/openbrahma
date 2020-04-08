@@ -4,12 +4,12 @@ use crate::Corpus;
 use std::any::Any;
 
 pub struct Food {
-    body: Box<dyn Shape>,
+    body: Shape,
     pub health: u32,
 }
 
 impl Food {
-    pub fn new(health: u32, body: Box<dyn Shape>) -> Food {
+    pub fn new(health: u32, body: Shape) -> Food {
         Food { health, body }
     }
 }
@@ -18,7 +18,7 @@ impl Corpus for Food {
     fn update(&mut self, _senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
         Vec::new()
     }
-    fn shape(&self) -> &Box<dyn Shape> {
+    fn shape(&self) -> &Shape {
         &self.body
     }
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {

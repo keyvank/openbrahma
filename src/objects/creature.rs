@@ -6,14 +6,14 @@ use std::any::Any;
 pub struct Creature {
     pub health: u32,
     brain: Brain,
-    body: Box<dyn Shape>,
+    body: Shape,
     eye: Vec<NeuronId>,
     motors: Vec<NeuronId>,
     danger: Vec<NeuronId>,
 }
 
 impl Creature {
-    pub fn new(health: u32, brain: Brain, body: Box<dyn Shape>) -> Creature {
+    pub fn new(health: u32, brain: Brain, body: Shape) -> Creature {
         let eye = brain.random_neurons(10);
         let motors = brain.random_neurons(4); // Forward, Backward, Rotate Left, Rotate Right
         let danger = brain.random_neurons(5);
@@ -74,7 +74,7 @@ impl Corpus for Creature {
         }));
         actuators
     }
-    fn shape(&self) -> &Box<dyn Shape> {
+    fn shape(&self) -> &Shape {
         &self.body
     }
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {

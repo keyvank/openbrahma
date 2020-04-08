@@ -1,8 +1,10 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Collide, Die, Eat, End, Eye, Move, Sense, Sensor};
 use crate::{Brain, Corpus, NeuronId};
+use serde::{Deserialize, Serialize};
 use std::any::Any;
 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Creature {
     pub health: u32,
     brain: Brain,

@@ -1,6 +1,8 @@
 use super::vector::Vector;
 use super::{Color, Intersection, Ray, Transform};
+use serde::{Deserialize, Serialize};
 
+#[derive(Clone, Serialize, Deserialize)]
 pub enum Shape {
     Circle { r: f64, col: Color },
 }

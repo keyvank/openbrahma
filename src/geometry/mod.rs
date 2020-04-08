@@ -1,10 +1,12 @@
+use serde::{Deserialize, Serialize};
+
 mod shape;
 mod vector;
 
 pub use shape::*;
 pub use vector::*;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Color(pub f32, pub f32, pub f32);
 impl Color {
     pub fn red() -> Color {
@@ -24,7 +26,7 @@ impl Color {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Ray {
     pub pos: Vector,
     pub ang: f64,
@@ -39,7 +41,7 @@ impl Ray {
 }
 
 use std::ops::Add;
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Transform {
     pub trans: Vector, // Translate
     pub rot: f64,      // Rotate

@@ -1,8 +1,10 @@
 use crate::geometry::Shape;
 use crate::io::{Actuator, Sense, Sensor};
 use crate::Corpus;
+use serde::{Deserialize, Serialize};
 use std::any::Any;
 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Food {
     body: Shape,
     pub health: u32,

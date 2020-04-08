@@ -1,5 +1,5 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
-use crate::io::{Actuator, Eye, Move, Sense, Sensor};
+use crate::io::{Actuator, Collide, Eat, Eye, Move, Sense, Sensor};
 use crate::{Brain, NeuronId, Updatable};
 
 pub struct Creature<S: Shape> {
@@ -37,6 +37,11 @@ impl<S: Shape> Updatable for Creature<S> {
                         }
                     }
                 }
+                Sense::Collision(ids) => {
+                    ids.iter().for_each(|&id| {
+                        actuators.push(Box::new(Eat { id }));
+                    });
+                }
             }
         }
         let motor_deltas = self.brain.get_deltas(&self.motors);
@@ -54,13 +59,16 @@ impl<S: Shape> Updatable for Creature<S> {
         &self.body
     }
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {
-        vec![Box::new(Eye {
-            ray: Ray {
-                pos: Vector::zero(),
-                ang: 0.0,
-            },
-            fov: 0.5,
-            res: 10,
-        })]
+        vec![
+            Box::new(Eye {
+                ray: Ray {
+                    pos: Vector::zero(),
+                    ang: 0.0,
+                },
+                fov: 0.5,
+                res: 10,
+            }),
+            Box::new(Collide),
+        ]
     }
 }

@@ -1,9 +1,10 @@
 use crate::geometry::{Intersection, Ray};
-use crate::{Object, World};
+use crate::{Object, ObjectId, World};
 
 #[derive(Debug)]
 pub enum Sense {
     Vision(Vec<Option<Intersection>>),
+    Collision(Vec<ObjectId>),
 }
 
 pub trait Sensor {
@@ -37,5 +38,18 @@ impl Sensor for Eye {
             );
         }
         Sense::Vision(view)
+    }
+}
+
+pub struct Collide;
+impl Sensor for Collide {
+    fn sense(&self, u: &Object, w: &World) -> Sense {
+        Sense::Collision(
+            w.objects
+                .iter()
+                .filter(|(&id, obj)| id != u.id && u.intersects(obj))
+                .map(|(&id, _)| id)
+                .collect::<Vec<ObjectId>>(),
+        )
     }
 }

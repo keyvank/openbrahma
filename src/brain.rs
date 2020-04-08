@@ -113,6 +113,14 @@ impl Brain {
             .collect()
     }
 
+    pub fn random_axons(&self, count: usize) -> Vec<Axon> {
+        let mut rng = thread_rng();
+        self.random_neurons(count)
+            .into_iter()
+            .map(|id| (rng.gen_range(0, THRESHOLD / 10), id))
+            .collect()
+    }
+
     pub fn get_deltas(&self, neurons: &Vec<NeuronId>) -> Vec<Weight> {
         neurons
             .iter()

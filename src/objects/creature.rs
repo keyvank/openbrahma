@@ -1,6 +1,6 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Collide, Die, Eat, End, Eye, Move, Sense, Sensor};
-use crate::{Brain, Corpus, NeuronId};
+use crate::{Axon, Brain, Corpus, NeuronId};
 use serde::{Deserialize, Serialize};
 use std::any::Any;
 
@@ -9,16 +9,16 @@ pub struct Creature {
     pub health: u32,
     brain: Brain,
     body: Shape,
-    eye: Vec<NeuronId>,
+    eye: Vec<Axon>,
     motors: Vec<NeuronId>,
-    danger: Vec<NeuronId>,
+    danger: Vec<Axon>,
 }
 
 impl Creature {
     pub fn new(health: u32, brain: Brain, body: Shape) -> Creature {
-        let eye = brain.random_neurons(10);
+        let eye = brain.random_axons(10);
         let motors = brain.random_neurons(4); // Forward, Backward, Rotate Left, Rotate Right
-        let danger = brain.random_neurons(5);
+        let danger = brain.random_axons(5);
         Creature {
             health,
             brain,
@@ -50,17 +50,17 @@ impl Corpus for Creature {
         self.brain.update();
 
         if self.health < 1000 {
-            for &n in self.danger.iter() {
-                self.brain.stimulate(n, 3i32);
+            for (pow, id) in self.danger.iter() {
+                self.brain.stimulate(*id, *pow);
             }
         }
 
         for sense in senses {
             match sense {
                 Sense::Vision(pixels) => {
-                    for (&neuron, pixel) in self.eye.iter().zip(pixels.iter()) {
+                    for ((pow, id), pixel) in self.eye.iter().zip(pixels.iter()) {
                         if pixel.is_some() {
-                            self.brain.stimulate(neuron, 3i32);
+                            self.brain.stimulate(*id, *pow);
                         }
                     }
                 }

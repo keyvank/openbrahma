@@ -26,6 +26,7 @@ impl<S: Shape> Creature<S> {
 
 impl<S: Shape> Updatable for Creature<S> {
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
+        let mut actuators = Vec::<Box<dyn Actuator>>::new();
         self.brain.update();
         for sense in senses {
             match sense {
@@ -41,12 +42,13 @@ impl<S: Shape> Updatable for Creature<S> {
         let motor_deltas = self.brain.get_deltas(&self.motors);
         let forward = Vector::i() * ((motor_deltas[1] - motor_deltas[0]) as f64);
         let rot = (motor_deltas[2] - motor_deltas[3]) as f64;
-        vec![Box::new(Move {
+        actuators.push(Box::new(Move {
             trans: Transform {
                 trans: forward,
                 rot: rot,
             },
-        })]
+        }));
+        actuators
     }
     fn shape(&self) -> &dyn Shape {
         &self.body

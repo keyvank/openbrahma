@@ -48,3 +48,10 @@ impl Actuator for Eat {
         Vec::new()
     }
 }
+
+pub struct Die;
+impl Actuator for Die {
+    fn actuate(&self, u: &Object, _w: &World) -> Vec<Action> {
+        vec![Action::Delete(u.id)]
+    }
+}

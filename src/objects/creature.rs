@@ -1,5 +1,5 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
-use crate::io::{Actuator, Collide, Eat, Eye, Move, Sense, Sensor};
+use crate::io::{Actuator, Collide, Die, Eat, Eye, Move, Sense, Sensor};
 use crate::{Brain, Corpus, NeuronId};
 
 pub struct Creature<S: Shape> {
@@ -27,6 +27,13 @@ impl<S: Shape> Creature<S> {
 impl<S: Shape> Corpus for Creature<S> {
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
         let mut actuators = Vec::<Box<dyn Actuator>>::new();
+
+        self.health -= 1;
+        if self.health == 0 {
+            actuators.push(Box::new(Die));
+            return actuators;
+        }
+
         self.brain.update();
         for sense in senses {
             match sense {

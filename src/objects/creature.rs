@@ -32,7 +32,7 @@ impl<S: Shape> Corpus for Creature<S> {
             match sense {
                 Sense::Vision(pixels) => {
                     for (&neuron, pixel) in self.eye.iter().zip(pixels.iter()) {
-                        if pixel.is_none() {
+                        if pixel.is_some() {
                             self.brain.stimulate(neuron, 3i32);
                         }
                     }

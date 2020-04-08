@@ -37,7 +37,7 @@ fn main() {
     let mut w = World::new();
     w.add_object(
         Box::new(Creature::new(
-            100,
+            10000,
             Brain::new(1000, 100),
             Box::new(Circle {
                 r: 20.0,
@@ -51,7 +51,7 @@ fn main() {
     );
     w.add_object(
         Box::new(Food::new(
-            50,
+            5000,
             Box::new(Circle {
                 r: 10.0,
                 col: Color::blue(),

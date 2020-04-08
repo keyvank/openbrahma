@@ -1,5 +1,6 @@
 use crate::geometry::{Shape, Transform};
 use crate::io::{Action, Actuator, Sense, Sensor};
+use std::any::Any;
 use std::collections::HashMap;
 
 pub type ObjectId = usize;
@@ -8,6 +9,7 @@ pub trait Corpus {
     fn shape(&self) -> &Box<dyn Shape>;
     fn sensors(&self) -> Vec<Box<dyn Sensor>>;
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>>;
+    fn as_any(&self) -> &dyn Any;
 }
 
 pub struct Object {

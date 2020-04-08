@@ -1,6 +1,7 @@
 use crate::geometry::Shape;
 use crate::io::{Actuator, Sense, Sensor};
 use crate::Corpus;
+use std::any::Any;
 
 pub struct Food {
     body: Box<dyn Shape>,
@@ -22,5 +23,8 @@ impl Corpus for Food {
     }
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {
         Vec::new()
+    }
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }

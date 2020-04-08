@@ -1,6 +1,7 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Collide, Die, Eat, Eye, Move, Sense, Sensor};
 use crate::{Brain, Corpus, NeuronId};
+use std::any::Any;
 
 pub struct Creature {
     health: u32,
@@ -77,5 +78,8 @@ impl Corpus for Creature {
             }),
             Box::new(Collide),
         ]
+    }
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }

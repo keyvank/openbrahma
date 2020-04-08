@@ -66,15 +66,17 @@ impl<S: ScoringSystem> Dharma<S> {
     }
     pub fn best_creature(&self) -> Creature {
         loop {
-            let c = Box::new(Creature::new(
+            let c = Creature::new(
                 10000,
                 Brain::new(1000, 100),
                 Shape::Circle {
                     r: 20.0,
                     col: Color::white(),
                 },
-            ));
-            println!("Score: {}", S::score(c));
+            );
+            if S::score(Box::new(c.clone())) > 9999 {
+                return c;
+            }
         }
     }
 }

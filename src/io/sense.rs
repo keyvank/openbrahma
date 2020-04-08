@@ -1,5 +1,5 @@
 use crate::geometry::{Intersection, Ray};
-use crate::{Object, Updatable, World};
+use crate::{Object, World};
 
 #[derive(Debug)]
 pub enum Sense {

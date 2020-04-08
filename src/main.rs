@@ -6,7 +6,7 @@ extern crate piston;
 
 use openbrahma::geometry::{Circle, Color, Transform, Vector};
 use openbrahma::objects::{Creature, Food};
-use openbrahma::{Brain, Object, World};
+use openbrahma::{Brain, World};
 
 mod graphical;
 

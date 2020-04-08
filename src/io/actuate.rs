@@ -15,7 +15,7 @@ pub struct Move {
     pub trans: Transform,
 }
 impl Actuator for Move {
-    fn actuate(&self, u: &Object, w: &World) -> Vec<Action> {
+    fn actuate(&self, u: &Object, _w: &World) -> Vec<Action> {
         let trans = self.trans.transform(u.trans);
         vec![Action::Update(
             u.id,
@@ -40,7 +40,7 @@ impl Actuator for Eat {
                     Action::Delete(self.id),
                     Action::Update(
                         u.id,
-                        Box::new(|o| {
+                        Box::new(|_o| {
                             // o.health += self.health
                         }),
                     ),

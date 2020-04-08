@@ -80,7 +80,7 @@ impl Brain {
         }
 
         let ids = b.neuron_ids();
-        for (id, (neuron, edges)) in b.neurons.iter_mut() {
+        for (_, (_, edges)) in b.neurons.iter_mut() {
             for &to in ids.choose_multiple(&mut rng, connectivity) {
                 edges.push((WEIGHT, to));
             }
@@ -140,7 +140,7 @@ impl Brain {
     pub fn mutate(&mut self, rate: f32) {
         let mut rng = thread_rng();
         let ids = self.neuron_ids();
-        for (id, (neuron, edges)) in self.neurons.iter_mut() {
+        for (_, (_, edges)) in self.neurons.iter_mut() {
             if rng.gen::<f32>() < rate {
                 edges.clear();
                 for &to in ids.choose_multiple(&mut rng, self.connectivity) {

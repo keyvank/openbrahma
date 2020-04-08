@@ -43,7 +43,7 @@ impl World {
         let senses = self
             .objects
             .iter()
-            .map(|(id, obj)| {
+            .map(|(_, obj)| {
                 obj.body
                     .sensors()
                     .iter()
@@ -56,14 +56,14 @@ impl World {
             .objects
             .iter_mut()
             .zip(senses.iter())
-            .map(|((id, obj), senses)| obj.body.update(senses))
+            .map(|((_, obj), senses)| obj.body.update(senses))
             .collect::<Vec<_>>();
 
         let actions = self
             .objects
             .iter()
             .zip(actuators.iter())
-            .map(|((id, obj), actuators)| {
+            .map(|((_, obj), actuators)| {
                 actuators
                     .iter()
                     .map(|a| a.actuate(&obj, &self))

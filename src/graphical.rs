@@ -8,7 +8,6 @@ use piston::input::{RenderArgs, RenderEvent, UpdateArgs, UpdateEvent};
 use piston::window::WindowSettings;
 
 const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
 const WIDTH: u32 = 640;
 const HEIGHT: u32 = 480;
 const SCALE: f64 = 3.0;
@@ -47,7 +46,7 @@ impl<'a> App<'a> {
         });
     }
 
-    fn update(&mut self, args: &UpdateArgs) {
+    fn update(&mut self, _args: &UpdateArgs) {
         self.world.update();
     }
 }

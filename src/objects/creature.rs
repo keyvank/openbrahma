@@ -31,6 +31,9 @@ impl Creature {
     pub fn crossover(&mut self, other: &Creature) {
         self.brain.crossover(&other.brain);
     }
+    pub fn mutate(&mut self, rate: f32) {
+        self.brain.mutate(rate);
+    }
 }
 
 impl Corpus for Creature {

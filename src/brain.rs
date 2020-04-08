@@ -10,7 +10,6 @@ pub type Axon = (Weight, NeuronId);
 const LEAK: Weight = 1i32;
 const THRESHOLD: Weight = 50i32;
 const REST: Weight = -10i32;
-const WEIGHT: Weight = 3i32;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Neuron {
@@ -82,7 +81,7 @@ impl Brain {
         let ids = b.neuron_ids();
         for (_, (_, edges)) in b.neurons.iter_mut() {
             for &to in ids.choose_multiple(&mut rng, connectivity) {
-                edges.push((WEIGHT, to));
+                edges.push((rng.gen_range(0, THRESHOLD), to));
             }
         }
 
@@ -144,7 +143,7 @@ impl Brain {
             if rng.gen::<f32>() < rate {
                 edges.clear();
                 for &to in ids.choose_multiple(&mut rng, self.connectivity) {
-                    edges.push((WEIGHT, to));
+                    edges.push((rng.gen_range(0, THRESHOLD), to));
                 }
             }
         }

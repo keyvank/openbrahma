@@ -39,10 +39,10 @@ fn main() {
         Box::new(Creature::new(
             100,
             Brain::new(1000, 100),
-            Circle {
+            Box::new(Circle {
                 r: 20.0,
                 col: Color::white(),
-            },
+            }),
         )),
         Transform {
             trans: Vector::zero(),
@@ -52,10 +52,10 @@ fn main() {
     w.add_object(
         Box::new(Food::new(
             50,
-            Circle {
+            Box::new(Circle {
                 r: 10.0,
                 col: Color::blue(),
-            },
+            }),
         )),
         Transform {
             trans: Vector(70.0, 40.0),

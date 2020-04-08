@@ -2,16 +2,16 @@ use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Collide, Die, Eat, Eye, Move, Sense, Sensor};
 use crate::{Brain, Corpus, NeuronId};
 
-pub struct Creature<S: Shape> {
+pub struct Creature {
     health: u32,
     brain: Brain,
-    body: S,
+    body: Box<dyn Shape>,
     eye: Vec<NeuronId>,
     motors: Vec<NeuronId>,
 }
 
-impl<S: Shape> Creature<S> {
-    pub fn new(health: u32, brain: Brain, body: S) -> Creature<S> {
+impl Creature {
+    pub fn new(health: u32, brain: Brain, body: Box<dyn Shape>) -> Creature {
         let eye = brain.random_neurons(10);
         let motors = brain.random_neurons(4); // Forward, Backward, Rotate Left, Rotate Right
         Creature {
@@ -24,7 +24,7 @@ impl<S: Shape> Creature<S> {
     }
 }
 
-impl<S: Shape> Corpus for Creature<S> {
+impl Corpus for Creature {
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
         let mut actuators = Vec::<Box<dyn Actuator>>::new();
 
@@ -62,7 +62,7 @@ impl<S: Shape> Corpus for Creature<S> {
         }));
         actuators
     }
-    fn shape(&self) -> &dyn Shape {
+    fn shape(&self) -> &Box<dyn Shape> {
         &self.body
     }
     fn sensors(&self) -> Vec<Box<dyn Sensor>> {

@@ -5,7 +5,7 @@ use std::collections::HashMap;
 pub type ObjectId = usize;
 
 pub trait Corpus {
-    fn shape(&self) -> &dyn Shape;
+    fn shape(&self) -> &Box<dyn Shape>;
     fn sensors(&self) -> Vec<Box<dyn Sensor>>;
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>>;
 }

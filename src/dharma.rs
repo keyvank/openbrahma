@@ -5,11 +5,11 @@ use std::marker::PhantomData;
 
 pub type Score = u32;
 pub trait ScoringSystem {
-    fn score<S: Shape + 'static>(c: Box<Creature<S>>) -> Score;
+    fn score(c: Box<Creature>) -> Score;
 }
 pub struct LifespanScoring;
 impl ScoringSystem for LifespanScoring {
-    fn score<S: Shape + 'static>(c: Box<Creature<S>>) -> Score {
+    fn score(c: Box<Creature>) -> Score {
         let mut w = World::new();
         w.add_object(
             c,
@@ -21,10 +21,10 @@ impl ScoringSystem for LifespanScoring {
         w.add_object(
             Box::new(Food::new(
                 50,
-                Circle {
+                Box::new(Circle {
                     r: 10.0,
                     col: Color::blue(),
-                },
+                }),
             )),
             Transform {
                 trans: Vector(70.0, 40.0),

@@ -1,4 +1,4 @@
-use crate::geometry::{Circle, Color, Shape, Transform, Vector};
+use crate::geometry::{Circle, Color, Transform, Vector};
 use crate::objects::{Creature, Food};
 use crate::World;
 use std::marker::PhantomData;

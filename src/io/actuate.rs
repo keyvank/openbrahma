@@ -34,27 +34,21 @@ pub struct Eat {
 impl Actuator for Eat {
     fn actuate(&self, u: &Object, w: &World) -> Vec<Action> {
         if let Some(food_obj) = w.objects.get(&self.id) {
-            match food_obj.body.as_any().downcast_ref::<Food>() {
-                Some(food) => {
-                    let food_health = food.health;
-                    if u.intersects(food_obj) {
-                        return vec![
-                            Action::Delete(self.id),
-                            Action::Update(
-                                u.id,
-                                Box::new(move |o| {
-                                    match o.body.as_any_mut().downcast_mut::<Creature>() {
-                                        Some(c) => {
-                                            c.health += food_health;
-                                        }
-                                        None => {}
-                                    };
-                                }),
-                            ),
-                        ];
-                    }
+            if let Some(food) = food_obj.body.as_any().downcast_ref::<Food>() {
+                let food_health = food.health;
+                if u.intersects(food_obj) {
+                    return vec![
+                        Action::Delete(self.id),
+                        Action::Update(
+                            u.id,
+                            Box::new(move |o| {
+                                if let Some(c) = o.body.as_any_mut().downcast_mut::<Creature>() {
+                                    c.health += food_health;
+                                };
+                            }),
+                        ),
+                    ];
                 }
-                None => {}
             }
         }
         Vec::new()

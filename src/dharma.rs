@@ -1,6 +1,6 @@
 use crate::geometry::{Circle, Color, Transform, Vector};
 use crate::objects::{Creature, Food};
-use crate::World;
+use crate::{Brain, World};
 use std::marker::PhantomData;
 
 pub type Score = u32;
@@ -32,7 +32,12 @@ impl ScoringSystem for LifespanScoring {
             },
         );
 
-        0
+        let mut lifespan = 0;
+        while w.update() {
+            lifespan += 1;
+        }
+
+        lifespan
     }
 }
 
@@ -40,4 +45,23 @@ pub struct Dharma<S: ScoringSystem> {
     _phantom: PhantomData<S>,
 }
 
-impl<S: ScoringSystem> Dharma<S> {}
+impl<S: ScoringSystem> Dharma<S> {
+    pub fn new() -> Dharma<S> {
+        Dharma {
+            _phantom: PhantomData::<S>,
+        }
+    }
+    pub fn best_creature(&self) -> Creature {
+        loop {
+            let c = Box::new(Creature::new(
+                10000,
+                Brain::new(1000, 100),
+                Box::new(Circle {
+                    r: 20.0,
+                    col: Color::white(),
+                }),
+            ));
+            println!("Score: {}", S::score(c));
+        }
+    }
+}

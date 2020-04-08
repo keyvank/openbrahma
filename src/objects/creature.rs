@@ -1,5 +1,5 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
-use crate::io::{Actuator, Collide, Die, Eat, Eye, Move, Sense, Sensor};
+use crate::io::{Actuator, Collide, Die, Eat, End, Eye, Move, Sense, Sensor};
 use crate::{Brain, Corpus, NeuronId};
 use std::any::Any;
 
@@ -32,6 +32,7 @@ impl Corpus for Creature {
         self.health -= 1;
         if self.health == 0 {
             actuators.push(Box::new(Die));
+            actuators.push(Box::new(End));
             return actuators;
         }
 

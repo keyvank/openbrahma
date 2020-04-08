@@ -6,6 +6,7 @@ pub enum Action {
     Create(Transform, Box<dyn Corpus>),
     Delete(ObjectId),
     Update(ObjectId, Box<dyn FnOnce(&mut Object)>),
+    Terminate,
 }
 
 pub trait Actuator {
@@ -59,5 +60,12 @@ pub struct Die;
 impl Actuator for Die {
     fn actuate(&self, u: &Object, _w: &World) -> Vec<Action> {
         vec![Action::Delete(u.id)]
+    }
+}
+
+pub struct End;
+impl Actuator for End {
+    fn actuate(&self, _u: &Object, _w: &World) -> Vec<Action> {
+        vec![Action::Terminate]
     }
 }

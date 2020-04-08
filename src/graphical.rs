@@ -47,7 +47,9 @@ impl<'a> App<'a> {
     }
 
     fn update(&mut self, _args: &UpdateArgs) {
-        self.world.update();
+        if !self.world.update() {
+            panic!("Simulation ended!");
+        }
     }
 }
 

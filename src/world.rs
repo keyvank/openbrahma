@@ -33,6 +33,7 @@ impl Object {
 pub struct World {
     pub objects: HashMap<ObjectId, Object>,
     pub next_id: ObjectId,
+    pub terminated: bool,
 }
 
 impl World {
@@ -40,6 +41,7 @@ impl World {
         World {
             objects: HashMap::new(),
             next_id: 0,
+            terminated: false,
         }
     }
     pub fn add_object(&mut self, body: Box<dyn Corpus>, trans: Transform) {
@@ -47,7 +49,11 @@ impl World {
             .insert(self.next_id, Object::new(self.next_id, body, trans));
         self.next_id += 1;
     }
-    pub fn update(&mut self) {
+    pub fn update(&mut self) -> bool {
+        if self.terminated {
+            return false;
+        }
+
         let senses = self
             .objects
             .iter()
@@ -90,7 +96,13 @@ impl World {
                     self.add_object(trans, body);
                 }
                 Action::Update(id, f) => f(self.objects.get_mut(&id).unwrap()),
+                Action::Terminate => {
+                    self.terminated = true;
+                    return false;
+                }
             }
         }
+
+        true
     }
 }

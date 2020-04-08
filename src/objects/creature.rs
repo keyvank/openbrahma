@@ -1,6 +1,6 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Collide, Eat, Eye, Move, Sense, Sensor};
-use crate::{Brain, NeuronId, Updatable};
+use crate::{Brain, Corpus, NeuronId};
 
 pub struct Creature<S: Shape> {
     health: u32,
@@ -24,7 +24,7 @@ impl<S: Shape> Creature<S> {
     }
 }
 
-impl<S: Shape> Updatable for Creature<S> {
+impl<S: Shape> Corpus for Creature<S> {
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
         let mut actuators = Vec::<Box<dyn Actuator>>::new();
         self.brain.update();

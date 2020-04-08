@@ -1,8 +1,8 @@
 use crate::geometry::Transform;
-use crate::{Object, ObjectId, Updatable, World};
+use crate::{Corpus, Object, ObjectId, World};
 
 pub enum Action {
-    Create(Transform, Box<dyn Updatable>),
+    Create(Transform, Box<dyn Corpus>),
     Delete(ObjectId),
     Update(ObjectId, Box<dyn FnOnce(&mut Object)>),
 }

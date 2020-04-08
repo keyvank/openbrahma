@@ -1,6 +1,6 @@
 use crate::geometry::Shape;
 use crate::io::{Actuator, Sense, Sensor};
-use crate::Updatable;
+use crate::Corpus;
 
 pub struct Food<S: Shape> {
     body: S,
@@ -13,7 +13,7 @@ impl<S: Shape> Food<S> {
     }
 }
 
-impl<S: Shape> Updatable for Food<S> {
+impl<S: Shape> Corpus for Food<S> {
     fn update(&mut self, _senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
         Vec::new()
     }

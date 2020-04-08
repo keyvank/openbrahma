@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 pub type ObjectId = usize;
 
-pub trait Updatable {
+pub trait Corpus {
     fn shape(&self) -> &dyn Shape;
     fn sensors(&self) -> Vec<Box<dyn Sensor>>;
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>>;
@@ -12,12 +12,12 @@ pub trait Updatable {
 
 pub struct Object {
     pub id: ObjectId,
-    pub body: Box<dyn Updatable>,
+    pub body: Box<dyn Corpus>,
     pub trans: Transform,
 }
 
 impl Object {
-    pub fn new(id: ObjectId, body: Box<dyn Updatable>, trans: Transform) -> Object {
+    pub fn new(id: ObjectId, body: Box<dyn Corpus>, trans: Transform) -> Object {
         Object { id, body, trans }
     }
     pub fn intersects(&self, other: &Object) -> bool {
@@ -39,7 +39,7 @@ impl World {
             next_id: 0,
         }
     }
-    pub fn add_object(&mut self, body: Box<dyn Updatable>, trans: Transform) {
+    pub fn add_object(&mut self, body: Box<dyn Corpus>, trans: Transform) {
         self.objects
             .insert(self.next_id, Object::new(self.next_id, body, trans));
         self.next_id += 1;

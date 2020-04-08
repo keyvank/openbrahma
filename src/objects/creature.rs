@@ -28,6 +28,9 @@ impl Creature {
             danger,
         }
     }
+    pub fn crossover(&mut self, other: &Creature) {
+        self.brain.crossover(&other.brain);
+    }
 }
 
 impl Corpus for Creature {

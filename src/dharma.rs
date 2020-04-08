@@ -31,6 +31,19 @@ impl ScoringSystem for LifespanScoring {
                 rot: 0.0,
             },
         );
+        w.add_object(
+            Box::new(Food::new(
+                50,
+                Box::new(Circle {
+                    r: 10.0,
+                    col: Color::blue(),
+                }),
+            )),
+            Transform {
+                trans: Vector(-70.0, -40.0),
+                rot: 0.0,
+            },
+        );
 
         let mut lifespan = 0;
         while w.update() {

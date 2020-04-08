@@ -33,9 +33,7 @@ pub struct Eat {
 impl Actuator for Eat {
     fn actuate(&self, u: &Object, w: &World) -> Vec<Action> {
         if let Some(food) = w.objects.get(&self.id) {
-            let boundary =
-                food.body.shape().bounding_circle().r + u.body.shape().bounding_circle().r;
-            if (food.trans.trans - u.trans.trans).len() < boundary {
+            if u.intersects(food) {
                 return vec![
                     Action::Delete(self.id),
                     Action::Update(

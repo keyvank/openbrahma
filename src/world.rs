@@ -20,6 +20,11 @@ impl Object {
     pub fn new(id: ObjectId, body: Box<dyn Updatable>, trans: Transform) -> Object {
         Object { id, body, trans }
     }
+    pub fn intersects(&self, other: &Object) -> bool {
+        let boundary =
+            self.body.shape().bounding_circle().r + other.body.shape().bounding_circle().r;
+        (self.trans.trans - other.trans.trans).len() < boundary
+    }
 }
 
 pub struct World {

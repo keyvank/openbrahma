@@ -81,7 +81,7 @@ impl Brain {
         let ids = b.neuron_ids();
         for (_, (_, edges)) in b.neurons.iter_mut() {
             for &to in ids.choose_multiple(&mut rng, connectivity) {
-                edges.push((rng.gen_range(0, THRESHOLD), to));
+                edges.push((rng.gen_range(0, THRESHOLD / 10), to));
             }
         }
 
@@ -143,7 +143,7 @@ impl Brain {
             if rng.gen::<f32>() < rate {
                 edges.clear();
                 for &to in ids.choose_multiple(&mut rng, self.connectivity) {
-                    edges.push((rng.gen_range(0, THRESHOLD), to));
+                    edges.push((rng.gen_range(0, THRESHOLD / 10), to));
                 }
             }
         }

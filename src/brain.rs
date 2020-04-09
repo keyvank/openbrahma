@@ -7,9 +7,9 @@ pub type Weight = i32;
 pub type NeuronId = usize;
 pub type Axon = (Weight, NeuronId);
 
-const LEAK: Weight = 1i32;
-const THRESHOLD: Weight = 50i32;
-const REST: Weight = -10i32;
+pub const LEAK: Weight = 1i32;
+pub const THRESHOLD: Weight = 50i32;
+pub const REST: Weight = -10i32;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Neuron {

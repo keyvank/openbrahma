@@ -1,5 +1,6 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Collide, Die, Eat, End, Eye, Move, Sense, Sensor};
+use crate::Genetic;
 use crate::{Axon, Brain, Corpus, NeuronId};
 use serde::{Deserialize, Serialize};
 use std::any::Any;
@@ -28,10 +29,13 @@ impl Creature {
             danger,
         }
     }
-    pub fn crossover(&mut self, other: &Creature) {
+}
+
+impl Genetic for Creature {
+    fn crossover(&mut self, other: &Creature) {
         self.brain.crossover(&other.brain);
     }
-    pub fn mutate(&mut self, rate: f32) {
+    fn mutate(&mut self, rate: f32) {
         self.brain.mutate(rate);
     }
 }

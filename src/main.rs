@@ -36,17 +36,20 @@ fn main() {
     println!("Hello, Dharma!");
 
     let mut d = Dharma::<LifespanScoring>::new(100);
-    let mut creature: Option<Creature> = None;
+
     let mut i = 0;
-    for _ in 0..100 {
-        creature = Some(d.cycle());
+    for _ in 0..10 {
+        d.cycle();
         println!("{}", i);
         i += 1;
     }
+    let creature = d.cycle();
+    creature.save("creature.json");
+    //let creature = Creature::load("creature.json");
 
     let mut w = World::new();
     w.add_object(
-        Box::new(creature.unwrap().clone()),
+        Box::new(creature.clone()),
         Transform {
             trans: Vector::zero(),
             rot: 0.0,

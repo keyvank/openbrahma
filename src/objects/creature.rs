@@ -74,6 +74,15 @@ impl Creature {
             danger,
         }
     }
+    pub fn save(&self, path: &str) {
+        use std::fs;
+        fs::write(path, serde_json::to_string(&self).unwrap()).unwrap();
+    }
+    pub fn load(path: &str) -> Self {
+        use std::fs;
+        let s = fs::read_to_string(path).unwrap();
+        serde_json::from_str(&s).unwrap()
+    }
 }
 
 impl Genetic for Creature {

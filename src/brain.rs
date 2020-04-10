@@ -141,11 +141,11 @@ impl Brain {
         let ids = self.neuron_ids();
         for (id, (neuron, axons)) in b.neurons.iter() {
             if rng.gen::<bool>() {
-                let nn = self.neurons.entry(*id).or_insert((*neuron, Vec::new()));
-                nn.1.clear();
+                let weights = &mut self.neurons.entry(*id).or_insert((*neuron, Vec::new())).1;
+                weights.clear();
                 for (new_weight, new_id) in axons {
                     if ids.contains(new_id) {
-                        nn.1.push((*new_weight, *new_id));
+                        weights.push((*new_weight, *new_id));
                     }
                 }
             }
@@ -155,11 +155,11 @@ impl Brain {
     pub fn mutate(&mut self, rate: f32) {
         let mut rng = thread_rng();
         let ids = self.neuron_ids();
-        for (_, (_, edges)) in self.neurons.iter_mut() {
+        for (_, (_, weights)) in self.neurons.iter_mut() {
             if rng.gen::<f32>() < rate {
-                edges.clear();
+                weights.clear();
                 for &to in ids.choose_multiple(&mut rng, self.connectivity) {
-                    edges.push((Brain::random_weight(&mut rng), to));
+                    weights.push((Brain::random_weight(&mut rng), to));
                 }
             }
         }

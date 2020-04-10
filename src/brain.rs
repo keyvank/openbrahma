@@ -1,3 +1,4 @@
+use rand::distributions::{Distribution, Normal};
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
@@ -10,6 +11,9 @@ pub type Axon = (Weight, NeuronId);
 pub const LEAK: Weight = 1i32;
 pub const THRESHOLD: Weight = 50i32;
 pub const REST: Weight = -10i32;
+
+pub const WEIGHT_MU: Weight = 5i32;
+pub const WEIGHT_SIGMA: f64 = 3.0;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Neuron {
@@ -57,6 +61,10 @@ pub struct Brain {
 }
 
 impl Brain {
+    fn random_weight<R: Rng>(rng: &mut R) -> Weight {
+        let normal = Normal::new(WEIGHT_MU as f64, WEIGHT_SIGMA);
+        (normal.sample(rng) as Weight).max(0i32).min(THRESHOLD)
+    }
     pub fn add_neuron(&mut self, n: Neuron) {
         self.neurons.insert(self.neuron_id, (n, Vec::new()));
         self.neuron_id += 1;
@@ -81,7 +89,7 @@ impl Brain {
         let ids = b.neuron_ids();
         for (_, (_, edges)) in b.neurons.iter_mut() {
             for &to in ids.choose_multiple(&mut rng, connectivity) {
-                edges.push((rng.gen_range(0, THRESHOLD / 10), to));
+                edges.push((Brain::random_weight(&mut rng), to));
             }
         }
 
@@ -117,7 +125,7 @@ impl Brain {
         let mut rng = thread_rng();
         self.random_neurons(count)
             .into_iter()
-            .map(|id| (rng.gen_range(0, THRESHOLD / 10), id))
+            .map(|id| (Brain::random_weight(&mut rng), id))
             .collect()
     }
 
@@ -151,7 +159,7 @@ impl Brain {
             if rng.gen::<f32>() < rate {
                 edges.clear();
                 for &to in ids.choose_multiple(&mut rng, self.connectivity) {
-                    edges.push((rng.gen_range(0, THRESHOLD / 10), to));
+                    edges.push((Brain::random_weight(&mut rng), to));
                 }
             }
         }

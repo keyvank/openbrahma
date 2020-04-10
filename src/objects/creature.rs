@@ -95,7 +95,7 @@ impl Corpus for Creature {
     fn update(&mut self, senses: &Vec<Sense>) -> Vec<Box<dyn Actuator>> {
         let mut actuators = Vec::<Box<dyn Actuator>>::new();
 
-        self.health -= 1;
+        self.health -= self.health.min(1);
         if self.health == 0 {
             actuators.push(Box::new(Die));
             actuators.push(Box::new(End));
@@ -104,7 +104,7 @@ impl Corpus for Creature {
 
         self.brain.update();
 
-        if self.health < 1000 {
+        if self.health < 2000 {
             for (pow, id) in self.danger.iter() {
                 self.brain.stimulate(*id, *pow);
             }
@@ -127,12 +127,14 @@ impl Corpus for Creature {
             }
         }
         let motor_deltas = self.brain.get_deltas(&self.motors);
+        let change: u32 = motor_deltas.iter().map(|n| n.abs() as u32).sum::<u32>() / 10;
+        self.health -= self.health.min(change);
         let forward = Vector::i() * ((motor_deltas[1] - motor_deltas[0]) as f64);
         let rot = (motor_deltas[2] - motor_deltas[3]) as f64;
         actuators.push(Box::new(Move {
             trans: Transform {
                 trans: forward,
-                rot: rot,
+                rot: rot / 10.0,
             },
         }));
         actuators

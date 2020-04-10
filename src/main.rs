@@ -5,7 +5,7 @@ extern crate opengl_graphics;
 extern crate piston;
 
 use openbrahma::dharma::{Dharma, LifespanScoring};
-use openbrahma::geometry::{Color, Transform, Vector};
+use openbrahma::geometry::{Color, Shape, Transform, Vector};
 use openbrahma::objects::{Creature, Food};
 use openbrahma::{Brain, World};
 
@@ -35,8 +35,41 @@ where
 fn main() {
     println!("Hello, Dharma!");
 
-    let mut d = Dharma::<LifespanScoring>::new();
-    let creature = d.best_creature();
+    let mut d = Dharma::<LifespanScoring>::new(100);
+    let mut creature: Option<Creature> = None;
+    let mut i = 0;
+    for _ in 0..100 {
+        creature = Some(d.cycle());
+        println!("{}", i);
+        i += 1;
+    }
 
-    //graphical::simulate(&mut w);
+    let mut w = World::new();
+    w.add_object(
+        Box::new(creature.unwrap().clone()),
+        Transform {
+            trans: Vector::zero(),
+            rot: 0.0,
+        },
+    );
+    for _ in 0..20 {
+        w.add_object(
+            Box::new(Food::new(
+                500,
+                Shape::Circle {
+                    r: 10.0,
+                    col: Color::blue(),
+                },
+            )),
+            Transform {
+                trans: Vector(
+                    (rand::random::<f64>() - 0.5) * 500.0,
+                    (rand::random::<f64>() - 0.5) * 500.0,
+                ),
+                rot: 0.0,
+            },
+        );
+    }
+
+    graphical::simulate(&mut w);
 }

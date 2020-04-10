@@ -55,24 +55,10 @@ pub struct Dharma<S: ScoringSystem> {
 }
 
 impl<S: ScoringSystem> Dharma<S> {
-    pub fn new(population: usize) -> Dharma<S> {
+    pub fn new(population: usize, starter: Creature) -> Dharma<S> {
         Dharma {
             population,
-            creatures: (0..population)
-                .map(|_| {
-                    (
-                        Creature::new(
-                            1500,
-                            Brain::new(50, 10),
-                            Shape::Circle {
-                                r: 20.0,
-                                col: Color::white(),
-                            },
-                        ),
-                        0,
-                    )
-                })
-                .collect(),
+            creatures: vec![(starter, 0); population],
             _phantom: PhantomData::<S>,
         }
     }

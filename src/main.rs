@@ -35,17 +35,16 @@ where
 fn main() {
     println!("Hello, Dharma!");
 
-    let mut d = Dharma::<LifespanScoring>::new(100);
+    let mut d = Dharma::<LifespanScoring>::new(100, Creature::load("creature.json"));
 
     let mut i = 0;
-    for _ in 0..10 {
+    for _ in 0..100 {
         d.cycle();
         println!("{}", i);
         i += 1;
     }
     let creature = d.cycle();
     creature.save("creature.json");
-    //let creature = Creature::load("creature.json");
 
     let mut w = World::new();
     w.add_object(

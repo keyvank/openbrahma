@@ -35,7 +35,7 @@ where
 fn main() {
     println!("Hello, Dharma!");
 
-    let mut d = Dharma::<LifespanScoring>::new(100, Creature::load("creature.json"));
+    let mut d = Dharma::<LifespanScoring>::new(100, Creature::load("creatures/eater.json"));
 
     let mut i = 0;
     for _ in 0..100 {

@@ -136,12 +136,62 @@ impl Brain {
             .collect()
     }
 
+    pub fn get_or_create(&mut self, id: &NeuronId) -> &mut (Neuron, Vec<Axon>) {
+        self.neurons.entry(*id).or_insert((
+            Neuron {
+                energy: 0,
+                delta: 0,
+            },
+            Vec::new(),
+        ))
+    }
+
+    pub fn crossover_axons(&mut self, a: &mut Vec<Axon>, b: &Vec<Axon>) {
+        let mut rng = thread_rng();
+        for (a, b) in a.iter_mut().zip(b.iter()) {
+            if rng.gen::<bool>() {
+                self.get_or_create(&b.1);
+                *a = *b;
+            }
+        }
+    }
+
+    pub fn mutate_axons(&mut self, a: &mut Vec<Axon>, rate: f32) {
+        let mut rng = thread_rng();
+        let length = a.len();
+        for (a, b) in a.iter_mut().zip(self.random_axons(length)) {
+            if rng.gen::<f32>() < rate {
+                *a = b;
+            }
+        }
+    }
+
+    pub fn crossover_neurons(&mut self, a: &mut Vec<NeuronId>, b: &Vec<NeuronId>) {
+        let mut rng = thread_rng();
+        for (a, b) in a.iter_mut().zip(b.iter()) {
+            if rng.gen::<bool>() {
+                self.get_or_create(b);
+                *a = *b;
+            }
+        }
+    }
+
+    pub fn mutate_neurons(&mut self, a: &mut Vec<NeuronId>, rate: f32) {
+        let mut rng = thread_rng();
+        let length = a.len();
+        for (a, b) in a.iter_mut().zip(self.random_neurons(length)) {
+            if rng.gen::<f32>() < rate {
+                *a = b;
+            }
+        }
+    }
+
     pub fn crossover(&mut self, b: &Brain) {
         let mut rng = thread_rng();
         let ids = self.neuron_ids();
         for (id, (neuron, axons)) in b.neurons.iter() {
             if rng.gen::<bool>() {
-                let weights = &mut self.neurons.entry(*id).or_insert((*neuron, Vec::new())).1;
+                let weights = &mut self.get_or_create(id).1;
                 weights.clear();
                 for (new_weight, new_id) in axons {
                     if ids.contains(new_id) {

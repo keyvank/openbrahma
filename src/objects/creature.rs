@@ -6,50 +6,6 @@ use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use std::any::Any;
 
-impl Genetic for Vec<NeuronId> {
-    fn crossover(&mut self, other: &Self) {
-        let mut rng = thread_rng();
-        let mut ij = (0, 0);
-        let mut ret = Vec::new();
-        while ij.0 < self.len() || ij.1 < other.len() {
-            if rng.gen::<bool>() && ij.0 < self.len() {
-                ret.push(self[ij.0]);
-                ij.0 += 1;
-            } else if ij.1 < other.len() {
-                ret.push(other[ij.1]);
-                ij.1 += 1;
-            }
-        }
-        *self = ret;
-    }
-    fn mutate(&mut self, rate: f32) {}
-}
-impl Genetic for Vec<Axon> {
-    fn crossover(&mut self, other: &Self) {
-        let mut rng = thread_rng();
-        let mut ij = (0, 0);
-        let mut ret = Vec::new();
-        while ij.0 < self.len() || ij.1 < other.len() {
-            if rng.gen::<bool>() && ij.0 < self.len() {
-                ret.push(self[ij.0]);
-                ij.0 += 1;
-            } else if ij.1 < other.len() {
-                ret.push(other[ij.1]);
-                ij.1 += 1;
-            }
-        }
-        *self = ret;
-    }
-    fn mutate(&mut self, rate: f32) {
-        let mut rng = thread_rng();
-        for (weight, id) in self.iter_mut() {
-            if rng.gen::<f32>() < rate {
-                *weight = rng.gen_range(0, THRESHOLD / 10);
-            }
-        }
-    }
-}
-
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Creature {
     pub health: u32,
@@ -88,15 +44,16 @@ impl Creature {
 impl Genetic for Creature {
     fn crossover(&mut self, other: &Creature) {
         self.brain.crossover(&other.brain);
-        self.eye.crossover(&other.eye);
-        self.motors.crossover(&other.motors);
-        self.danger.crossover(&other.danger);
+        self.brain.crossover_axons(&mut self.eye, &other.eye);
+        self.brain.crossover_axons(&mut self.danger, &other.danger);
+        self.brain
+            .crossover_neurons(&mut self.motors, &other.motors);
     }
     fn mutate(&mut self, rate: f32) {
         self.brain.mutate(rate);
-        self.eye.mutate(rate);
-        self.motors.mutate(rate);
-        self.danger.mutate(rate);
+        self.brain.mutate_axons(&mut self.eye, rate);
+        self.brain.mutate_axons(&mut self.danger, rate);
+        self.brain.mutate_neurons(&mut self.motors, rate);
     }
 }
 

@@ -99,8 +99,8 @@ impl Corpus for Creature {
         let rot = (motor_deltas[2] - motor_deltas[3]) as f64;
         actuators.push(Box::new(Move {
             trans: Transform {
-                trans: forward,
-                rot: rot / 10.0,
+                trans: forward / 3.0,
+                rot: rot / 30.0,
             },
         }));
         actuators

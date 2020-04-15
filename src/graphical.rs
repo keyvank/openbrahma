@@ -25,6 +25,7 @@ impl<'a> App<'a> {
             .values()
             .map(|o| {
                 (
+                    o.trans.rot,
                     o.trans.trans * SCALE,
                     o.body.shape().bounding_circle().r * SCALE,
                     o.body.shape().bounding_circle().col,
@@ -37,11 +38,16 @@ impl<'a> App<'a> {
 
             clear(BLACK, gl);
 
-            for (p, r, col) in circs {
+            for (rot, p, r, col) in circs {
                 let square = rectangle::square(0.0, 0.0, 2.0 * r);
                 let pos = center + p;
                 let transform = c.transform.trans(pos.0, pos.1).trans(-r, -r);
                 ellipse([col.0, col.1, col.2, 1.0], square, transform, gl);
+
+                let square = rectangle::square(0.0, 0.0, r);
+                let pos = center + p + Vector(rot.cos() * r, rot.sin() * r);
+                let transform = c.transform.trans(pos.0, pos.1).trans(-r / 2.0, -r / 2.0);
+                ellipse(BLACK, square, transform, gl);
             }
         });
     }

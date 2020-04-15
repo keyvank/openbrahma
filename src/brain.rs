@@ -1,6 +1,6 @@
-use rand::distributions::{Distribution, Normal};
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
+use rand_distr::{Distribution, Normal};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -62,7 +62,7 @@ pub struct Brain {
 
 impl Brain {
     fn random_weight<R: Rng>(rng: &mut R) -> Weight {
-        let normal = Normal::new(WEIGHT_MU as f64, WEIGHT_SIGMA);
+        let normal = Normal::new(WEIGHT_MU as f64, WEIGHT_SIGMA).unwrap();
         (normal.sample(rng) as Weight).max(0i32).min(THRESHOLD)
     }
     pub fn add_neuron(&mut self, n: Neuron) {
@@ -189,7 +189,7 @@ impl Brain {
     pub fn crossover(&mut self, b: &Brain) {
         let mut rng = thread_rng();
         let ids = self.neuron_ids();
-        for (id, (neuron, axons)) in b.neurons.iter() {
+        for (id, (_, axons)) in b.neurons.iter() {
             if rng.gen::<bool>() {
                 let weights = &mut self.get_or_create(id).1;
                 weights.clear();

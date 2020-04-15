@@ -7,11 +7,11 @@ extern crate piston;
 use openbrahma::dharma::{Dharma, LifespanScoring};
 use openbrahma::geometry::{Color, Shape, Transform, Vector};
 use openbrahma::objects::{Creature, Food};
-use openbrahma::{Brain, World};
+use openbrahma::World;
 
 mod graphical;
 
-fn run<F>(mut f: F)
+pub fn run<F>(mut f: F)
 where
     F: FnMut() -> (),
 {

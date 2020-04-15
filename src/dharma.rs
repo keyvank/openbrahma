@@ -1,6 +1,6 @@
 use crate::geometry::{Color, Shape, Transform, Vector};
 use crate::objects::{Creature, Food};
-use crate::{Brain, Genetic, World};
+use crate::{Genetic, World};
 use rayon::prelude::*;
 use std::marker::PhantomData;
 
@@ -49,7 +49,6 @@ impl ScoringSystem for LifespanScoring {
 }
 
 pub struct Dharma<S: ScoringSystem> {
-    population: usize,
     creatures: Vec<(Creature, u32)>,
     _phantom: PhantomData<S>,
 }
@@ -57,13 +56,12 @@ pub struct Dharma<S: ScoringSystem> {
 impl<S: ScoringSystem> Dharma<S> {
     pub fn new(population: usize, starter: Creature) -> Dharma<S> {
         Dharma {
-            population,
             creatures: vec![(starter, 0); population],
             _phantom: PhantomData::<S>,
         }
     }
     pub fn cycle(&mut self) -> Creature {
-        let scores = self.creatures.par_iter_mut().for_each(|(c, score)| {
+        self.creatures.par_iter_mut().for_each(|(c, score)| {
             *score = S::score(Box::new(c.clone()));
         });
         self.creatures.sort_by_key(|(_, score)| -(*score as i32));

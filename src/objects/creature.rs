@@ -1,8 +1,7 @@
 use crate::geometry::{Ray, Shape, Transform, Vector};
 use crate::io::{Actuator, Collide, Die, Eat, End, Eye, Move, Sense, Sensor};
 use crate::Genetic;
-use crate::{Axon, Brain, Corpus, NeuronId, THRESHOLD};
-use rand::{thread_rng, Rng};
+use crate::{Axon, Brain, Corpus, NeuronId};
 use serde::{Deserialize, Serialize};
 use std::any::Any;
 
